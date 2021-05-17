@@ -40,7 +40,8 @@ public class Minesweeper extends JFrame{
     public Minesweeper() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        setSize(900,1000); 
+        setSize(900,1000);
+        setLocationRelativeTo(null);
         setComponents();
         start_new_game();
     }
