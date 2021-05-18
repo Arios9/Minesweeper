@@ -53,10 +53,10 @@ public class MinesweeperGame extends JFrame{
         add(boardPanel =new BoardPanel(gameLevel),BorderLayout.PAGE_END);
         add(flagsLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_START);
         add(timeLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_END);
-        add(restartButton =new RestartButton(),BorderLayout.CENTER);
+        add(restartButton =new RestartButton(this),BorderLayout.CENTER);
     }
 
-    private void startNewGame() {
+    public void startNewGame() {
        numberOfUnusedFlags = gameLevel.getNumberOfBombs();
        remainingButtons = gameLevel.getNumberOfSquaresInHeight() * gameLevel.getNumberOfSquaresInWidth();
        setTheBoard();
@@ -206,27 +206,35 @@ public class MinesweeperGame extends JFrame{
                 }
             }
 
-            private class RestartButton extends JButton implements ActionListener{
-                private final ImageIcon smileFace =new ImageIcon(".\\src\\images\\smileface.png");
-                private final ImageIcon pressedFace =new ImageIcon(".\\src\\images\\pressedface.png");
-                private final ImageIcon loseFace =new ImageIcon(".\\src\\images\\loseface.png");
-                private final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
-                
-                private RestartButton(){    
-                    setPreferredSize(new Dimension(100,100));
-                    addActionListener(this);
-                    setBackground(Color.WHITE);
-                }   
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    timer.cancel();
-                    boardPanel.removeAll();
-                    startNewGame();
-                    boardPanel.revalidate();
-                    boardPanel.repaint();
-                }
-            }
+//            private class RestartButton extends JButton implements ActionListener{
+//                private final ImageIcon smileFace =new ImageIcon(".\\src\\images\\smileface.png");
+//                private final ImageIcon pressedFace =new ImageIcon(".\\src\\images\\pressedface.png");
+//                private final ImageIcon loseFace =new ImageIcon(".\\src\\images\\loseface.png");
+//                private final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
+//
+//                private RestartButton(MinesweeperGame minesweeperGame){
+//                    setPreferredSize(new Dimension(100,100));
+//                    addActionListener(this);
+//                    setBackground(Color.WHITE);
+//                }
+//                @Override
+//                public void actionPerformed(ActionEvent ae) {
+//                    timer.cancel();
+//                    boardPanel.removeAll();
+//                    startNewGame();
+//                    boardPanel.revalidate();
+//                    boardPanel.repaint();
+//                }
+//            }
 
+
+    public BoardPanel getBoardPanel() {
+        return boardPanel;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
 
     public HeaderLabel getTimeLabel() {
         return timeLabel;
