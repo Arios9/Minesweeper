@@ -18,33 +18,38 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
 
-public class Minesweeper extends JFrame{
+public class MinesweeperGame extends JFrame{
     
     private BoardPanel boardPanel;
     private TopLabel flagsLabel, timeLabel;
     private RestartButton restartButton;
+    private final int height, width, numberOfSquaresInHeight, numberOfSquaresInWidth, numberOfBombs;
     private int numberOfUnusedFlags, remainingButtons;
-    private final int boardSize =16, numberOfBombs =40;
-    private final Buttons[][] buttons=new Buttons[boardSize][boardSize];
+    private final Square[][] squares;
     private Timer timer;
     private final ImageIcon bombIcon=new ImageIcon(".\\src\\images\\bomb100px.png"),flagIcon=new ImageIcon(".\\src\\images\\flag100px.png");
     
-    public static void main(String[] args) {
-        new Minesweeper().setVisible(true);
+
+    public MinesweeperGame(int numberOfSquaresInHeight, int numberOfSquaresInWidth, int numberOfBombs) {
+        this.numberOfSquaresInHeight = numberOfSquaresInHeight;
+        this.numberOfSquaresInWidth = numberOfSquaresInWidth;
+        this.numberOfBombs = numberOfBombs;
+        squares = new Square[numberOfSquaresInHeight][numberOfSquaresInWidth];
+        height = numberOfSquaresInHeight * 50;
+        width = numberOfSquaresInWidth * 50;
+        setFrame();
     }
 
-    public Minesweeper() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    private void setFrame() {
         setResizable(false);
-        setSize(900,1000);
+        setSize(width, height + 100);
         setLocationRelativeTo(null);
         setComponents();
         startNewGame();
     }
-    
+
     private void setComponents() {
         add(boardPanel =new BoardPanel(),BorderLayout.PAGE_END);
         add(flagsLabel =new TopLabel(),BorderLayout.LINE_START);
@@ -54,7 +59,7 @@ public class Minesweeper extends JFrame{
 
     private void startNewGame() {
        numberOfUnusedFlags = numberOfBombs;
-       remainingButtons = boardSize * boardSize;
+       remainingButtons = numberOfSquaresInHeight * numberOfSquaresInWidth;
        setTheBoard();
        createBombs();
        countBombsAroundButtons();
@@ -73,80 +78,80 @@ public class Minesweeper extends JFrame{
     }
 
     private void setTheBoard() {
-        for(int i = 0; i< boardSize; i++)
-            for(int j = 0; j< boardSize; j++)
-                boardPanel.add(buttons[i][j]=new Buttons(i,j));
+        for(int i = 0; i< numberOfSquaresInHeight; i++)
+            for(int j = 0; j< numberOfSquaresInWidth; j++)
+                boardPanel.add(squares[i][j]=new Square(i,j));
     }
     
     private void createBombs() {
-        Random rand = new Random(); 
+        Random rand = new Random();
         int bombs=0;
-        while(bombs< numberOfBombs){
-            int i=rand.nextInt(boardSize);
-            int j=rand.nextInt(boardSize);
-            if(!buttons[i][j].hasBomb){
-                buttons[i][j].hasBomb = true;
+        while(bombs < numberOfBombs){
+            int i=rand.nextInt(numberOfSquaresInHeight);
+            int j=rand.nextInt(numberOfSquaresInWidth);
+            if(!squares[i][j].hasBomb){
+                squares[i][j].hasBomb = true;
                 bombs++;
             }    
         }
     }
 
     private void countBombsAroundButtons() {
-        for(int i = 0; i< boardSize; i++)
-            for(int j = 0; j< boardSize; j++)
+        for(int i = 0; i< numberOfSquaresInHeight; i++)
+            for(int j = 0; j< numberOfSquaresInWidth; j++)
                 for(int k=i-1; k<=i+1; k++)
                     for(int s=j-1; s<=j+1; s++)
-                         if((k>=0&&s>=0&&k< boardSize &&s< boardSize)&&!(k==i&&s==j))
-                             if(buttons[k][s].hasBomb)
-                                 buttons[i][j].bombsAroundIt++;
+                         if((k>=0&&s>=0&&k< numberOfSquaresInHeight &&s< numberOfSquaresInWidth)&&!(k==i&&s==j))
+                             if(squares[k][s].hasBomb)
+                                 squares[i][j].bombsAroundIt++;
     }
     
     private void setBombsEverywhere(){
-        for(int i = 0; i< boardSize; i++)
-            for(int j = 0; j< boardSize; j++)
-                if(buttons[i][j].hasBomb &&!buttons[i][j].hasFlag)
-                    buttons[i][j].setIcon(bombIcon);
-    gameOver(restartButton.loseFace);
+        for(int i = 0; i< numberOfSquaresInHeight; i++)
+            for(int j = 0; j< numberOfSquaresInWidth; j++)
+                if(squares[i][j].hasBomb && !squares[i][j].hasFlag)
+                    squares[i][j].setIcon(bombIcon);
+        gameOver(restartButton.loseFace);
     }
     
     
     private void gameOver(ImageIcon icon) {
-        for(int i = 0; i< boardSize; i++)
-            for(int j = 0; j< boardSize; j++)
-                buttons[i][j].removeMouseListener(buttons[i][j]);
+        for(int i = 0; i< numberOfSquaresInHeight; i++)
+            for(int j = 0; j< numberOfSquaresInWidth; j++)
+                squares[i][j].removeMouseListener(squares[i][j]);
         timer.cancel();
         restartButton.setIcon(icon);
     }
 
     
-    private void recursion(Buttons button) {
-        if(button.hasFlag)return;
-        button.cancelButton();
-        if(button.bombsAroundIt !=0) button.setText(String.valueOf(button.bombsAroundIt));
-        else recursionForButtonsAround(button);
+    private void recursion(Square square) {
+        if(square.hasFlag)return;
+        square.cancelButton();
+        if(square.bombsAroundIt !=0) square.setText(String.valueOf(square.bombsAroundIt));
+        else recursionForButtonsAround(square);
         if(--remainingButtons == numberOfBombs) gameOver(restartButton.winFace);//Win!
     }
 
-    private void recursionForButtonsAround(Buttons button) {
-        int i=button.i,j=button.j;
+    private void recursionForButtonsAround(Square square) {
+        int i=square.i,j=square.j;
         for(int k=i-1; k<=i+1; k++){
-            if(k<0||k == boardSize)continue;
+            if(k<0||k == numberOfSquaresInHeight)continue;
             for(int s=j-1; s<=j+1; s++){
-                if(s<0||s == boardSize)continue;
-                if(!buttons[k][s].hasDoneRecursion)
-                recursion(buttons[k][s]);
+                if(s<0||s == numberOfSquaresInWidth)continue;
+                if(!squares[k][s].hasDoneRecursion)
+                recursion(squares[k][s]);
             }
         }
     }
     
 
-            private class Buttons extends JButton implements MouseListener{
-                
+            private class Square extends JButton implements MouseListener{
+
                 private final int i,j;
                 private int bombsAroundIt = 0;
                 private boolean hasBomb = false, hasFlag = false, hasDoneRecursion = false;
 
-                private Buttons(int i, int j) {
+                private Square(int i, int j) {
                     this.i=i; this.j=j;
                     addMouseListener(this);
                     setBorder(BorderFactory.createLineBorder(Color.black));
@@ -192,11 +197,11 @@ public class Minesweeper extends JFrame{
                 public void setText(String string){
                     super.setText(string);
                     setForeground(getColor());
-                    setFont(new Font("Arial",Font.BOLD,450/ boardSize));
+                    setFont(new Font("Arial",Font.BOLD,25));
                 }  
 
                 private void cancelButton() {
-                    hasDoneRecursion =true;
+                    hasDoneRecursion = true;
                     setBackground(Color.LIGHT_GRAY);
                     removeMouseListener(this);
                 }
@@ -205,7 +210,7 @@ public class Minesweeper extends JFrame{
             
             private class TopLabel extends JLabel{
                 private TopLabel(){
-                    setPreferredSize(new Dimension(400,100));
+                    setPreferredSize(new Dimension((width - 100)/2,100));
                     setOpaque(true);
                     setFont(new Font("Arial", Font.PLAIN, 50));
                     setHorizontalAlignment(SwingConstants.CENTER);
@@ -215,8 +220,8 @@ public class Minesweeper extends JFrame{
             
             private class BoardPanel extends JPanel{
                 private BoardPanel() {
-                    setPreferredSize(new Dimension(900,900));
-                    setLayout(new GridLayout(boardSize, boardSize));
+                    setPreferredSize(new Dimension(width, height));
+                    setLayout(new GridLayout(numberOfSquaresInHeight, numberOfSquaresInWidth));
                 }   
             }
             
@@ -242,7 +247,7 @@ public class Minesweeper extends JFrame{
             }
             
             private class MyTimerTask extends TimerTask{
-                private int secondsPassed =0;
+                private int secondsPassed = 0;
                 @Override
                 public void run() {
                     timeLabel.setText(String.valueOf(secondsPassed++));
