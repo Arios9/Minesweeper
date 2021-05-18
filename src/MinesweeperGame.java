@@ -25,20 +25,19 @@ public class MinesweeperGame extends JFrame{
     private BoardPanel boardPanel;
     private TopLabel flagsLabel, timeLabel;
     private RestartButton restartButton;
-    private final int height, width, numberOfSquaresInHeight, numberOfSquaresInWidth, numberOfBombs;
+    private final int height, width;
+    private final GameLevel gameLevel;
     private int numberOfUnusedFlags, remainingButtons;
     private final Square[][] squares;
     private Timer timer;
     private final ImageIcon bombIcon=new ImageIcon(".\\src\\images\\bomb100px.png"),flagIcon=new ImageIcon(".\\src\\images\\flag100px.png");
     
 
-    public MinesweeperGame(int numberOfSquaresInHeight, int numberOfSquaresInWidth, int numberOfBombs) {
-        this.numberOfSquaresInHeight = numberOfSquaresInHeight;
-        this.numberOfSquaresInWidth = numberOfSquaresInWidth;
-        this.numberOfBombs = numberOfBombs;
-        squares = new Square[numberOfSquaresInHeight][numberOfSquaresInWidth];
-        height = numberOfSquaresInHeight * 50;
-        width = numberOfSquaresInWidth * 50;
+    public MinesweeperGame(GameLevel gameLevel) {
+        this.gameLevel = gameLevel;
+        squares = new Square[gameLevel.getNumberOfSquaresInHeight()][gameLevel.getNumberOfSquaresInWidth()];
+        height = gameLevel.getNumberOfSquaresInHeight() * 50;
+        width = gameLevel.getNumberOfSquaresInWidth() * 50;
         setFrame();
     }
 
@@ -58,8 +57,8 @@ public class MinesweeperGame extends JFrame{
     }
 
     private void startNewGame() {
-       numberOfUnusedFlags = numberOfBombs;
-       remainingButtons = numberOfSquaresInHeight * numberOfSquaresInWidth;
+       numberOfUnusedFlags = gameLevel.getNumberOfBombs();
+       remainingButtons = gameLevel.getNumberOfSquaresInHeight() * gameLevel.getNumberOfSquaresInWidth();
        setTheBoard();
        createBombs();
        countBombsAroundButtons();
@@ -78,17 +77,17 @@ public class MinesweeperGame extends JFrame{
     }
 
     private void setTheBoard() {
-        for(int i = 0; i< numberOfSquaresInHeight; i++)
-            for(int j = 0; j< numberOfSquaresInWidth; j++)
+        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
+            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
                 boardPanel.add(squares[i][j]=new Square(i,j));
     }
     
     private void createBombs() {
         Random rand = new Random();
         int bombs=0;
-        while(bombs < numberOfBombs){
-            int i=rand.nextInt(numberOfSquaresInHeight);
-            int j=rand.nextInt(numberOfSquaresInWidth);
+        while(bombs < gameLevel.getNumberOfBombs()){
+            int i=rand.nextInt(gameLevel.getNumberOfSquaresInHeight());
+            int j=rand.nextInt(gameLevel.getNumberOfSquaresInWidth());
             if(!squares[i][j].hasBomb){
                 squares[i][j].hasBomb = true;
                 bombs++;
@@ -97,18 +96,18 @@ public class MinesweeperGame extends JFrame{
     }
 
     private void countBombsAroundButtons() {
-        for(int i = 0; i< numberOfSquaresInHeight; i++)
-            for(int j = 0; j< numberOfSquaresInWidth; j++)
+        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
+            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
                 for(int k=i-1; k<=i+1; k++)
                     for(int s=j-1; s<=j+1; s++)
-                         if((k>=0&&s>=0&&k< numberOfSquaresInHeight &&s< numberOfSquaresInWidth)&&!(k==i&&s==j))
+                         if((k>=0&&s>=0&&k< gameLevel.getNumberOfSquaresInHeight() &&s< gameLevel.getNumberOfSquaresInWidth())&&!(k==i&&s==j))
                              if(squares[k][s].hasBomb)
                                  squares[i][j].bombsAroundIt++;
     }
     
     private void setBombsEverywhere(){
-        for(int i = 0; i< numberOfSquaresInHeight; i++)
-            for(int j = 0; j< numberOfSquaresInWidth; j++)
+        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
+            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
                 if(squares[i][j].hasBomb && !squares[i][j].hasFlag)
                     squares[i][j].setIcon(bombIcon);
         gameOver(restartButton.loseFace);
@@ -116,8 +115,8 @@ public class MinesweeperGame extends JFrame{
     
     
     private void gameOver(ImageIcon icon) {
-        for(int i = 0; i< numberOfSquaresInHeight; i++)
-            for(int j = 0; j< numberOfSquaresInWidth; j++)
+        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
+            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
                 squares[i][j].removeMouseListener(squares[i][j]);
         timer.cancel();
         restartButton.setIcon(icon);
@@ -129,15 +128,15 @@ public class MinesweeperGame extends JFrame{
         square.cancelButton();
         if(square.bombsAroundIt !=0) square.setText(String.valueOf(square.bombsAroundIt));
         else recursionForButtonsAround(square);
-        if(--remainingButtons == numberOfBombs) gameOver(restartButton.winFace);//Win!
+        if(--remainingButtons == gameLevel.getNumberOfBombs()) gameOver(restartButton.winFace);//Win!
     }
 
     private void recursionForButtonsAround(Square square) {
         int i=square.i,j=square.j;
         for(int k=i-1; k<=i+1; k++){
-            if(k<0||k == numberOfSquaresInHeight)continue;
+            if(k<0||k == gameLevel.getNumberOfSquaresInHeight())continue;
             for(int s=j-1; s<=j+1; s++){
-                if(s<0||s == numberOfSquaresInWidth)continue;
+                if(s<0||s == gameLevel.getNumberOfSquaresInWidth())continue;
                 if(!squares[k][s].hasDoneRecursion)
                 recursion(squares[k][s]);
             }
@@ -214,14 +213,13 @@ public class MinesweeperGame extends JFrame{
                     setOpaque(true);
                     setFont(new Font("Arial", Font.PLAIN, 50));
                     setHorizontalAlignment(SwingConstants.CENTER);
-                    setForeground(Color.RED);
-                }   
+                }
             }
             
             private class BoardPanel extends JPanel{
                 private BoardPanel() {
                     setPreferredSize(new Dimension(width, height));
-                    setLayout(new GridLayout(numberOfSquaresInHeight, numberOfSquaresInWidth));
+                    setLayout(new GridLayout(gameLevel.getNumberOfSquaresInHeight(), gameLevel.getNumberOfSquaresInWidth()));
                 }   
             }
             

@@ -19,20 +19,26 @@ public class MainMenu extends JFrame {
     }
 
     private void setComponents() {
+
+        GameLevel easyLevel, mediumLevel, hardLevel;
+        easyLevel = new GameLevel("Easy", 9, 9, 10);
+        mediumLevel = new GameLevel("Medium", 16, 16, 40);
+        hardLevel = new GameLevel("Hard", 16, 30, 99);
+
         JButton easy, medium, hard;
         easy = new JButton("Easy");
         easy.addActionListener(e -> {
-            new MinesweeperGame(9, 9, 10).setVisible(true);
+            new MinesweeperGame(easyLevel).setVisible(true);
         });
         add(easy);
         medium = new JButton("Medium");
         medium.addActionListener(e -> {
-            new MinesweeperGame(16, 16, 40).setVisible(true);
+            new MinesweeperGame(mediumLevel).setVisible(true);
         });
         add(medium);
         hard = new JButton("Hard");
         hard.addActionListener(e -> {
-            new MinesweeperGame(16, 30, 99).setVisible(true);
+            new MinesweeperGame(hardLevel).setVisible(true);
         });
         add(hard);
     }
