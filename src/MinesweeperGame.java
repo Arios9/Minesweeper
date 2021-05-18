@@ -21,7 +21,8 @@ import javax.swing.SwingUtilities;
 public class MinesweeperGame extends JFrame{
     
     private BoardPanel boardPanel;
-    private HeaderLabel flagsLabel, timeLabel;
+    private HeaderLabel flagsLabel;
+    private HeaderLabel timeLabel;
     private RestartButton restartButton;
     private final int frameHeight, frameWidth, headerHeight;
     private final GameLevel gameLevel;
@@ -72,7 +73,7 @@ public class MinesweeperGame extends JFrame{
 
     private void createTimer() {
         timer=new Timer();
-        timer.schedule(new MyTimerTask(),0,1000);
+        timer.schedule(new MyTimerTask(this),0,1000);
     }
 
     private void setTheBoard() {
@@ -225,14 +226,10 @@ public class MinesweeperGame extends JFrame{
                     boardPanel.repaint();
                 }
             }
-            
-            private class MyTimerTask extends TimerTask{
-                private int secondsPassed = 0;
-                @Override
-                public void run() {
-                    timeLabel.setText(String.valueOf(secondsPassed++));
-                }
-            }
 
-  
+
+    public HeaderLabel getTimeLabel() {
+        return timeLabel;
+    }
+
 }
