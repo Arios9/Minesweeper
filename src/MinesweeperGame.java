@@ -2,7 +2,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -15,7 +14,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -23,36 +21,37 @@ import javax.swing.SwingUtilities;
 public class MinesweeperGame extends JFrame{
     
     private BoardPanel boardPanel;
-    private TopLabel flagsLabel, timeLabel;
+    private HeaderLabel flagsLabel, timeLabel;
     private RestartButton restartButton;
-    private final int height, width;
+    private final int frameHeight, frameWidth, headerHeight;
     private final GameLevel gameLevel;
     private int numberOfUnusedFlags, remainingButtons;
     private final Square[][] squares;
     private Timer timer;
     private final ImageIcon bombIcon=new ImageIcon(".\\src\\images\\bomb100px.png"),flagIcon=new ImageIcon(".\\src\\images\\flag100px.png");
-    
+
 
     public MinesweeperGame(GameLevel gameLevel) {
         this.gameLevel = gameLevel;
         squares = new Square[gameLevel.getNumberOfSquaresInHeight()][gameLevel.getNumberOfSquaresInWidth()];
-        height = gameLevel.getNumberOfSquaresInHeight() * 50;
-        width = gameLevel.getNumberOfSquaresInWidth() * 50;
+        headerHeight = 100;
+        frameHeight = gameLevel.getNumberOfSquaresInHeight() * 50 + headerHeight;
+        frameWidth = gameLevel.getNumberOfSquaresInWidth() * 50;
         setFrame();
     }
 
     private void setFrame() {
         setResizable(false);
-        setSize(width, height + 100);
+        setSize(frameWidth, frameHeight);
         setLocationRelativeTo(null);
         setComponents();
         startNewGame();
     }
 
     private void setComponents() {
-        add(boardPanel =new BoardPanel(),BorderLayout.PAGE_END);
-        add(flagsLabel =new TopLabel(),BorderLayout.LINE_START);
-        add(timeLabel =new TopLabel(),BorderLayout.LINE_END);
+        add(boardPanel =new BoardPanel(gameLevel),BorderLayout.PAGE_END);
+        add(flagsLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_START);
+        add(timeLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_END);
         add(restartButton =new RestartButton(),BorderLayout.CENTER);
     }
 
@@ -205,24 +204,7 @@ public class MinesweeperGame extends JFrame{
                     removeMouseListener(this);
                 }
             }
-            
-            
-            private class TopLabel extends JLabel{
-                private TopLabel(){
-                    setPreferredSize(new Dimension((width - 100)/2,100));
-                    setOpaque(true);
-                    setFont(new Font("Arial", Font.PLAIN, 50));
-                    setHorizontalAlignment(SwingConstants.CENTER);
-                }
-            }
-            
-            private class BoardPanel extends JPanel{
-                private BoardPanel() {
-                    setPreferredSize(new Dimension(width, height));
-                    setLayout(new GridLayout(gameLevel.getNumberOfSquaresInHeight(), gameLevel.getNumberOfSquaresInWidth()));
-                }   
-            }
-            
+
             private class RestartButton extends JButton implements ActionListener{
                 private final ImageIcon smileFace =new ImageIcon(".\\src\\images\\smileface.png");
                 private final ImageIcon pressedFace =new ImageIcon(".\\src\\images\\pressedface.png");
@@ -250,7 +232,7 @@ public class MinesweeperGame extends JFrame{
                 public void run() {
                     timeLabel.setText(String.valueOf(secondsPassed++));
                 }
-            } 
+            }
 
   
 }
