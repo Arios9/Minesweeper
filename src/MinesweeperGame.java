@@ -1,40 +1,47 @@
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Random;
 import java.util.Timer;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.SwingUtilities;
-
 
 public class MinesweeperGame {
 
-    private final MinesweeperFrame minesweeperFrame;
-    private final GameLevel gameLevel;
-    private final Square[][] squares;
-    private Timer timer;
-    private int numberOfUnusedFlags, remainingButtons;
-    private final ImageIcon bombIcon=new ImageIcon(".\\src\\images\\bomb100px.png"),flagIcon=new ImageIcon(".\\src\\images\\flag100px.png");
+    private static MinesweeperGame minesweeperGame = null;
+    public static MinesweeperFrame minesweeperFrame;
+    public static GameLevel gameLevel;
+    public static Square[][] squares;
+    public static Timer timer;
+    public static int numberOfUnusedFlags, remainingButtons;
 
-
-    public MinesweeperGame(GameLevel gameLevel) {
-        this.gameLevel = gameLevel;
-        squares = new Square[gameLevel.getNumberOfSquaresInHeight()][gameLevel.getNumberOfSquaresInWidth()];
-        minesweeperFrame = new MinesweeperFrame(this);
-        startNewGame();
+    public static void createNewGame(GameLevel gameLevel) throws Exception {
+        if(minesweeperGame != null)
+            throw new Exception();
+        minesweeperGame = new MinesweeperGame(gameLevel);
+        minesweeperFrame = new MinesweeperFrame();
+        minesweeperGame.startNewGame();
     }
 
+    public static MinesweeperGame GameInstance()   {
+        return minesweeperGame;
+    }
+
+    public static void FinishCurrentGame(){
+        minesweeperGame = null;
+    }
+
+
+    private MinesweeperGame(GameLevel gl) {
+        gameLevel = gl;
+        squares = new Square[gameLevel.getNumberOfSquaresInHeight()][gameLevel.getNumberOfSquaresInWidth()];
+    }
+
+
     public void startNewGame() {
-       initializeCountingVariables();
-       setTheBoard();
-       createBombs();
-       countBombsAroundButtons();
-       createTimer();
-       setComponentsContent();
+        initializeCountingVariables();
+        MinesweeperFrame.boardPanel.setTheBoard();
+        createBombs();
+        countBombsAroundButtons();
+        createTimer();
+        setComponentsContent();
     }
 
     private void initializeCountingVariables() {
@@ -43,19 +50,13 @@ public class MinesweeperGame {
     }
 
     private void setComponentsContent() {
-        minesweeperFrame.getRestartButton().setIcon(RestartButton.smileFace);
-        minesweeperFrame.getFlagsLabel().setText(Integer.toString(numberOfUnusedFlags));
+        MinesweeperFrame.restartButton.setIcon(RestartButton.smileFace);
+        MinesweeperFrame.flagsLabel.setText(Integer.toString(numberOfUnusedFlags));
     }
 
     private void createTimer() {
         timer=new Timer();
-        timer.schedule(new MyTimerTask(this),0,1000);
-    }
-
-    private void setTheBoard() {
-        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
-            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
-                minesweeperFrame.getBoardPanel().add(squares[i][j]=new Square(i,j));
+        timer.schedule(new MyTimerTask(),0,1000);
     }
     
     private void createBombs() {
@@ -64,8 +65,8 @@ public class MinesweeperGame {
         while(bombs < gameLevel.getNumberOfBombs()){
             int i=rand.nextInt(gameLevel.getNumberOfSquaresInHeight());
             int j=rand.nextInt(gameLevel.getNumberOfSquaresInWidth());
-            if(!squares[i][j].hasBomb){
-                squares[i][j].hasBomb = true;
+            if(!squares[i][j].HasBomb()){
+                squares[i][j].setHasBomb(true);
                 bombs++;
             }    
         }
@@ -77,15 +78,15 @@ public class MinesweeperGame {
                 for(int k=i-1; k<=i+1; k++)
                     for(int s=j-1; s<=j+1; s++)
                          if((k>=0&&s>=0&&k< gameLevel.getNumberOfSquaresInHeight() &&s< gameLevel.getNumberOfSquaresInWidth())&&!(k==i&&s==j))
-                             if(squares[k][s].hasBomb)
-                                 squares[i][j].bombsAroundIt++;
+                             if(squares[k][s].HasBomb())
+                                 squares[i][j].incrementBombsAroundIt();
     }
     
-    private void setBombsEverywhere(){
+    public void setBombsEverywhere(){
         for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
             for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
-                if(squares[i][j].hasBomb && !squares[i][j].hasFlag)
-                    squares[i][j].setIcon(bombIcon);
+                if(squares[i][j].HasBomb() && !squares[i][j].HasFlag())
+                    squares[i][j].setBombIcon();
         gameOver(RestartButton.loseFace);
     }
     
@@ -95,103 +96,28 @@ public class MinesweeperGame {
             for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
                 squares[i][j].removeMouseListener(squares[i][j]);
         timer.cancel();
-        minesweeperFrame.getRestartButton().setIcon(icon);
+        MinesweeperFrame.restartButton.setIcon(icon);
     }
 
     
-    private void recursion(Square square) {
-        if(square.hasFlag)return;
+    public void recursion(Square square) {
+        if(square.HasFlag())return;
         square.cancelButton();
-        if(square.bombsAroundIt !=0) square.setText(String.valueOf(square.bombsAroundIt));
+        if(square.getBombsAroundIt() !=0) square.setText(String.valueOf(square.getBombsAroundIt()));
         else recursionForButtonsAround(square);
-        if(--remainingButtons == gameLevel.getNumberOfBombs()) gameOver(RestartButton.winFace);//Win!
+        if(--remainingButtons == gameLevel.getNumberOfBombs()) gameOver(RestartButton.winFace);
     }
 
     private void recursionForButtonsAround(Square square) {
-        int i=square.i,j=square.j;
+        int i=square.getI(),j=square.getJ();
         for(int k=i-1; k<=i+1; k++){
             if(k<0||k == gameLevel.getNumberOfSquaresInHeight())continue;
             for(int s=j-1; s<=j+1; s++){
                 if(s<0||s == gameLevel.getNumberOfSquaresInWidth())continue;
-                if(!squares[k][s].hasDoneRecursion)
+                if(!squares[k][s].HasDoneRecursion())
                 recursion(squares[k][s]);
             }
         }
     }
-    
 
-            private class Square extends JButton implements MouseListener{
-
-                private final int i,j;
-                private int bombsAroundIt = 0;
-                private boolean hasBomb = false, hasFlag = false, hasDoneRecursion = false;
-
-                private Square(int i, int j) {
-                    this.i=i; this.j=j;
-                    addMouseListener(this);
-                    setBorder(BorderFactory.createLineBorder(Color.black));
-                    setBackground(Color.GRAY);
-                }
-
-                @Override public void mouseClicked(MouseEvent me) {
-                            if(SwingUtilities.isRightMouseButton(me)){
-                                if(!hasFlag){
-                                    setIcon(flagIcon);
-                                    hasFlag = true;
-                                    minesweeperFrame.getFlagsLabel().setText(String.valueOf(--numberOfUnusedFlags));
-                                }else{
-                                    setIcon(null);
-                                    hasFlag = false;
-                                    minesweeperFrame.getFlagsLabel().setText(String.valueOf(++numberOfUnusedFlags));
-                                }
-                            }
-                            if(SwingUtilities.isLeftMouseButton(me)){
-                                if(!hasFlag)
-                                if(hasBomb) setBombsEverywhere();
-                                else recursion(this); 
-                            }         
-                }
-                @Override public void mousePressed(MouseEvent me) {if(SwingUtilities.isLeftMouseButton(me))
-                    minesweeperFrame.getRestartButton().setIcon(RestartButton.pressedFace);}
-                @Override public void mouseReleased(MouseEvent me) {if(SwingUtilities.isLeftMouseButton(me))
-                    minesweeperFrame.getRestartButton().setIcon(RestartButton.smileFace);}
-                @Override public void mouseEntered(MouseEvent me) {setBackground(Color.LIGHT_GRAY);}
-                @Override public void mouseExited(MouseEvent me) {setBackground(Color.GRAY);}
-
-                private Color getColor() {
-                    return switch (bombsAroundIt) {
-                        case 1 -> Color.BLUE;
-                        case 2 -> Color.GREEN;
-                        case 3 -> Color.RED;
-                        case 4 -> Color.ORANGE;
-                        default -> Color.BLACK;
-                    };
-                }
-                           
-                @Override
-                public void setText(String string){
-                    super.setText(string);
-                    setForeground(getColor());
-                    setFont(new Font("Arial",Font.BOLD,25));
-                }  
-
-                private void cancelButton() {
-                    hasDoneRecursion = true;
-                    setBackground(Color.LIGHT_GRAY);
-                    removeMouseListener(this);
-                }
-            }
-
-
-    public MinesweeperFrame getMinesweeperFrame() {
-        return minesweeperFrame;
-    }
-
-    public GameLevel getGameLevel() {
-        return gameLevel;
-    }
-
-    public Timer getTimer() {
-        return timer;
-    }
 }

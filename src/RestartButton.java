@@ -10,10 +10,7 @@ public class RestartButton extends JButton implements ActionListener {
     public static final ImageIcon loseFace =new ImageIcon(".\\src\\images\\loseface.png");
     public static final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
 
-    private MinesweeperGame minesweeperGame;
-
-    public RestartButton(MinesweeperGame minesweeperGame){
-        this.minesweeperGame = minesweeperGame;
+    public RestartButton(){
         setPreferredSize(new Dimension(100,100));
         addActionListener(this);
         setBackground(Color.WHITE);
@@ -21,10 +18,10 @@ public class RestartButton extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        minesweeperGame.getTimer().cancel();
-        minesweeperGame.getMinesweeperFrame().getBoardPanel().removeAll();
-        minesweeperGame.startNewGame();
-        minesweeperGame.getMinesweeperFrame().getBoardPanel().revalidate();
-        minesweeperGame.getMinesweeperFrame().getBoardPanel().repaint();
+        MinesweeperGame.timer.cancel();
+        MinesweeperFrame.boardPanel.removeAll();
+        MinesweeperGame.GameInstance().startNewGame();
+        MinesweeperFrame.boardPanel.revalidate();
+        MinesweeperFrame.boardPanel.repaint();
     }
 }

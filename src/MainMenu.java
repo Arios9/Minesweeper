@@ -8,8 +8,11 @@ public class MainMenu extends JFrame {
     private GameLevel mediumLevel;
     private GameLevel hardLevel;
 
+    public static MainMenu mainMenu;
+
     public static void main(String[] args) {
-        new MainMenu().setVisible(true);
+        mainMenu = new MainMenu();
+        mainMenu.setVisible(true);
     }
 
     public MainMenu() {

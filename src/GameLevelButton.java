@@ -23,6 +23,19 @@ public class GameLevelButton extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new MinesweeperGame(gameLevel);
+        try {
+            MinesweeperGame.createNewGame(gameLevel);
+        } catch (Exception exception) {
+            showErrorMessage();
+        }
+    }
+
+    private void showErrorMessage() {
+        JOptionPane.showMessageDialog(
+                MainMenu.mainMenu,
+                "You are still on a game",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
     }
 }

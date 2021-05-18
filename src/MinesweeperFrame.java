@@ -1,21 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class MinesweeperFrame extends JFrame {
+public class MinesweeperFrame extends JFrame{
 
-    private BoardPanel boardPanel;
-    private HeaderLabel flagsLabel;
-    private HeaderLabel timeLabel;
-    private RestartButton restartButton;
+    public static BoardPanel boardPanel;
+    public static HeaderLabel flagsLabel;
+    public static HeaderLabel timeLabel;
+    public static RestartButton restartButton;
     private final int frameHeight, frameWidth, headerHeight;
 
-    private MinesweeperGame minesweeperGame;
-
-    public MinesweeperFrame(MinesweeperGame minesweeperGame) {
-        this.minesweeperGame = minesweeperGame;
+    public MinesweeperFrame() {
         headerHeight = 100;
-        frameHeight = minesweeperGame.getGameLevel().getNumberOfSquaresInHeight() * 50 + headerHeight;
-        frameWidth = minesweeperGame.getGameLevel().getNumberOfSquaresInWidth() * 50;
+        frameHeight = MinesweeperGame.gameLevel.getNumberOfSquaresInHeight() * 50 + headerHeight;
+        frameWidth = MinesweeperGame.gameLevel.getNumberOfSquaresInWidth() * 50;
         setFrame();
     }
 
@@ -25,28 +22,23 @@ public class MinesweeperFrame extends JFrame {
         setLocationRelativeTo(null);
         setComponents();
         setVisible(true);
+        setOnCloseListener();
+    }
+
+    private void setOnCloseListener() {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                MinesweeperGame.FinishCurrentGame();
+            }
+        });
     }
 
     private void setComponents() {
-        add(boardPanel =new BoardPanel(minesweeperGame), BorderLayout.PAGE_END);
+        add(boardPanel =new BoardPanel(), BorderLayout.PAGE_END);
         add(flagsLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_START);
         add(timeLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_END);
-        add(restartButton =new RestartButton(minesweeperGame),BorderLayout.CENTER);
+        add(restartButton =new RestartButton(),BorderLayout.CENTER);
     }
 
-    public BoardPanel getBoardPanel() {
-        return boardPanel;
-    }
-
-    public HeaderLabel getFlagsLabel() {
-        return flagsLabel;
-    }
-
-    public HeaderLabel getTimeLabel() {
-        return timeLabel;
-    }
-
-    public RestartButton getRestartButton() {
-        return restartButton;
-    }
 }
