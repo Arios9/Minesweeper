@@ -23,6 +23,6 @@ public class GameLevelButton extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new MinesweeperGame(gameLevel).setVisible(true);
+        new MinesweeperGame(gameLevel);
     }
 }

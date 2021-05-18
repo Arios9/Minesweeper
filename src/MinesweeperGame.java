@@ -1,64 +1,35 @@
-import java.awt.BorderLayout;
+
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 
-public class MinesweeperGame extends JFrame{
-    
-    private BoardPanel boardPanel;
-    private HeaderLabel flagsLabel;
-    private HeaderLabel timeLabel;
-    private RestartButton restartButton;
-    private final int frameHeight, frameWidth, headerHeight;
+public class MinesweeperGame {
+
+    private final MinesweeperFrame minesweeperFrame;
     private final GameLevel gameLevel;
-    private int numberOfUnusedFlags, remainingButtons;
     private final Square[][] squares;
     private Timer timer;
+    private int numberOfUnusedFlags, remainingButtons;
     private final ImageIcon bombIcon=new ImageIcon(".\\src\\images\\bomb100px.png"),flagIcon=new ImageIcon(".\\src\\images\\flag100px.png");
 
 
     public MinesweeperGame(GameLevel gameLevel) {
         this.gameLevel = gameLevel;
         squares = new Square[gameLevel.getNumberOfSquaresInHeight()][gameLevel.getNumberOfSquaresInWidth()];
-        headerHeight = 100;
-        frameHeight = gameLevel.getNumberOfSquaresInHeight() * 50 + headerHeight;
-        frameWidth = gameLevel.getNumberOfSquaresInWidth() * 50;
-        setFrame();
-    }
-
-    private void setFrame() {
-        setResizable(false);
-        setSize(frameWidth, frameHeight);
-        setLocationRelativeTo(null);
-        setComponents();
+        minesweeperFrame = new MinesweeperFrame(this);
         startNewGame();
     }
 
-    private void setComponents() {
-        add(boardPanel =new BoardPanel(gameLevel),BorderLayout.PAGE_END);
-        add(flagsLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_START);
-        add(timeLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_END);
-        add(restartButton =new RestartButton(this),BorderLayout.CENTER);
-    }
-
     public void startNewGame() {
-       numberOfUnusedFlags = gameLevel.getNumberOfBombs();
-       remainingButtons = gameLevel.getNumberOfSquaresInHeight() * gameLevel.getNumberOfSquaresInWidth();
+       initializeCountingVariables();
        setTheBoard();
        createBombs();
        countBombsAroundButtons();
@@ -66,9 +37,14 @@ public class MinesweeperGame extends JFrame{
        setComponentsContent();
     }
 
+    private void initializeCountingVariables() {
+        numberOfUnusedFlags = gameLevel.getNumberOfBombs();
+        remainingButtons = gameLevel.getNumberOfSquaresInHeight() * gameLevel.getNumberOfSquaresInWidth();
+    }
+
     private void setComponentsContent() {
-        restartButton.setIcon(restartButton.smileFace);
-        flagsLabel.setText(Integer.toString(numberOfUnusedFlags));
+        minesweeperFrame.getRestartButton().setIcon(RestartButton.smileFace);
+        minesweeperFrame.getFlagsLabel().setText(Integer.toString(numberOfUnusedFlags));
     }
 
     private void createTimer() {
@@ -79,7 +55,7 @@ public class MinesweeperGame extends JFrame{
     private void setTheBoard() {
         for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
             for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
-                boardPanel.add(squares[i][j]=new Square(i,j));
+                minesweeperFrame.getBoardPanel().add(squares[i][j]=new Square(i,j));
     }
     
     private void createBombs() {
@@ -110,7 +86,7 @@ public class MinesweeperGame extends JFrame{
             for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
                 if(squares[i][j].hasBomb && !squares[i][j].hasFlag)
                     squares[i][j].setIcon(bombIcon);
-        gameOver(restartButton.loseFace);
+        gameOver(RestartButton.loseFace);
     }
     
     
@@ -119,7 +95,7 @@ public class MinesweeperGame extends JFrame{
             for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
                 squares[i][j].removeMouseListener(squares[i][j]);
         timer.cancel();
-        restartButton.setIcon(icon);
+        minesweeperFrame.getRestartButton().setIcon(icon);
     }
 
     
@@ -128,7 +104,7 @@ public class MinesweeperGame extends JFrame{
         square.cancelButton();
         if(square.bombsAroundIt !=0) square.setText(String.valueOf(square.bombsAroundIt));
         else recursionForButtonsAround(square);
-        if(--remainingButtons == gameLevel.getNumberOfBombs()) gameOver(restartButton.winFace);//Win!
+        if(--remainingButtons == gameLevel.getNumberOfBombs()) gameOver(RestartButton.winFace);//Win!
     }
 
     private void recursionForButtonsAround(Square square) {
@@ -162,11 +138,11 @@ public class MinesweeperGame extends JFrame{
                                 if(!hasFlag){
                                     setIcon(flagIcon);
                                     hasFlag = true;
-                                    flagsLabel.setText(String.valueOf(--numberOfUnusedFlags));
+                                    minesweeperFrame.getFlagsLabel().setText(String.valueOf(--numberOfUnusedFlags));
                                 }else{
                                     setIcon(null);
                                     hasFlag = false;
-                                    flagsLabel.setText(String.valueOf(++numberOfUnusedFlags));
+                                    minesweeperFrame.getFlagsLabel().setText(String.valueOf(++numberOfUnusedFlags));
                                 }
                             }
                             if(SwingUtilities.isLeftMouseButton(me)){
@@ -176,9 +152,9 @@ public class MinesweeperGame extends JFrame{
                             }         
                 }
                 @Override public void mousePressed(MouseEvent me) {if(SwingUtilities.isLeftMouseButton(me))
-                    restartButton.setIcon(restartButton.pressedFace);}
+                    minesweeperFrame.getRestartButton().setIcon(RestartButton.pressedFace);}
                 @Override public void mouseReleased(MouseEvent me) {if(SwingUtilities.isLeftMouseButton(me))
-                    restartButton.setIcon(restartButton.smileFace);}
+                    minesweeperFrame.getRestartButton().setIcon(RestartButton.smileFace);}
                 @Override public void mouseEntered(MouseEvent me) {setBackground(Color.LIGHT_GRAY);}
                 @Override public void mouseExited(MouseEvent me) {setBackground(Color.GRAY);}
 
@@ -206,38 +182,16 @@ public class MinesweeperGame extends JFrame{
                 }
             }
 
-//            private class RestartButton extends JButton implements ActionListener{
-//                private final ImageIcon smileFace =new ImageIcon(".\\src\\images\\smileface.png");
-//                private final ImageIcon pressedFace =new ImageIcon(".\\src\\images\\pressedface.png");
-//                private final ImageIcon loseFace =new ImageIcon(".\\src\\images\\loseface.png");
-//                private final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
-//
-//                private RestartButton(MinesweeperGame minesweeperGame){
-//                    setPreferredSize(new Dimension(100,100));
-//                    addActionListener(this);
-//                    setBackground(Color.WHITE);
-//                }
-//                @Override
-//                public void actionPerformed(ActionEvent ae) {
-//                    timer.cancel();
-//                    boardPanel.removeAll();
-//                    startNewGame();
-//                    boardPanel.revalidate();
-//                    boardPanel.repaint();
-//                }
-//            }
 
+    public MinesweeperFrame getMinesweeperFrame() {
+        return minesweeperFrame;
+    }
 
-    public BoardPanel getBoardPanel() {
-        return boardPanel;
+    public GameLevel getGameLevel() {
+        return gameLevel;
     }
 
     public Timer getTimer() {
         return timer;
     }
-
-    public HeaderLabel getTimeLabel() {
-        return timeLabel;
-    }
-
 }

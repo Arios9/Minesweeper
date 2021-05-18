@@ -5,10 +5,10 @@ import java.awt.event.ActionListener;
 
 public class RestartButton extends JButton implements ActionListener {
 
-    public final ImageIcon smileFace =new ImageIcon(".\\src\\images\\smileface.png");
-    public final ImageIcon pressedFace =new ImageIcon(".\\src\\images\\pressedface.png");
-    public final ImageIcon loseFace =new ImageIcon(".\\src\\images\\loseface.png");
-    public final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
+    public static final ImageIcon smileFace =new ImageIcon(".\\src\\images\\smileface.png");
+    public static final ImageIcon pressedFace =new ImageIcon(".\\src\\images\\pressedface.png");
+    public static final ImageIcon loseFace =new ImageIcon(".\\src\\images\\loseface.png");
+    public static final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
 
     private MinesweeperGame minesweeperGame;
 
@@ -22,9 +22,9 @@ public class RestartButton extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         minesweeperGame.getTimer().cancel();
-        minesweeperGame.getBoardPanel().removeAll();
+        minesweeperGame.getMinesweeperFrame().getBoardPanel().removeAll();
         minesweeperGame.startNewGame();
-        minesweeperGame.getBoardPanel().revalidate();
-        minesweeperGame.getBoardPanel().repaint();
+        minesweeperGame.getMinesweeperFrame().getBoardPanel().revalidate();
+        minesweeperGame.getMinesweeperFrame().getBoardPanel().repaint();
     }
 }

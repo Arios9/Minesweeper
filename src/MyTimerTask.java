@@ -6,7 +6,7 @@ public class MyTimerTask extends TimerTask {
     private HeaderLabel timeHeaderLabel;
 
     public MyTimerTask(MinesweeperGame minesweeperGame) {
-        timeHeaderLabel = minesweeperGame.getTimeLabel();
+        timeHeaderLabel = minesweeperGame.getMinesweeperFrame().getTimeLabel();
     }
 
     @Override
