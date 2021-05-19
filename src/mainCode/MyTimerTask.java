@@ -15,6 +15,6 @@ public class MyTimerTask extends TimerTask {
 
     @Override
     public void run() {
-        timeHeaderLabel.setText(String.valueOf(secondsPassed++));
+        timeHeaderLabel.reFresh(secondsPassed++);
     }
 }

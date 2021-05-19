@@ -32,7 +32,7 @@ public class Square extends JButton implements MouseListener {
                 removeFlag();
             else
                 addFlag();
-            flagsLabel.setText(String.valueOf(numberOfUnusedFlags));
+            flagsLabel.reFresh(numberOfUnusedFlags);
         }
         if(SwingUtilities.isLeftMouseButton(me)){
             if(hasFlag) return;
@@ -103,13 +103,6 @@ public class Square extends JButton implements MouseListener {
         this.hasBomb = hasBomb;
     }
 
-    public void cancelIt() {
-        hasDoneRecursion = true;
-        setBackground(Color.LIGHT_GRAY);
-        removeMouseListener(this);
-        remainingButtons--;
-    }
-
     public void setBombIcon() {
         setIcon(bombIcon);
     }
@@ -132,5 +125,12 @@ public class Square extends JButton implements MouseListener {
         setIcon(null);
         hasFlag = false;
         numberOfUnusedFlags++;
+    }
+
+    public void cancelIt() {
+        hasDoneRecursion = true;
+        setBackground(Color.LIGHT_GRAY);
+        removeMouseListener(this);
+        remainingButtons--;
     }
 }

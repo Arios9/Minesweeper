@@ -3,8 +3,7 @@ package mainCode;
 import javax.swing.*;
 import java.awt.*;
 
-import static mainCode.MinesweeperFrame.frameWidth;
-import static mainCode.MinesweeperFrame.headerHeight;
+import static mainCode.MinesweeperFrame.*;
 import static mainCode.RestartButton.buttonWidth;
 
 public class HeaderLabel extends JLabel {
@@ -14,5 +13,9 @@ public class HeaderLabel extends JLabel {
         setOpaque(true);
         setFont(new Font("Arial", Font.PLAIN, 50));
         setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+    public void reFresh(int number) {
+        setText(String.valueOf(number));
     }
 }
