@@ -6,7 +6,11 @@ import static mainCode.MinesweeperFrame.timeLabel;
 
 public class MyTimerTask extends TimerTask {
 
-    private int secondsPassed = 0;
+    public static int secondsPassed;
+
+    public MyTimerTask() {
+        secondsPassed = 0;
+    }
 
     @Override
     public void run() {
