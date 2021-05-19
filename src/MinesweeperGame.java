@@ -16,8 +16,13 @@ public class MinesweeperGame {
         if(minesweeperGame != null)
             throw new GameInProgressException();
         minesweeperGame = new MinesweeperGame(gameLevel);
-        minesweeperFrame = new MinesweeperFrame();
+        setFrame();
         minesweeperGame.startNewGame();
+    }
+
+    private static void setFrame() {
+        minesweeperFrame = new MinesweeperFrame();
+        minesweeperFrame.setComponents();
     }
 
     public static MinesweeperGame GameInstance()   {
@@ -27,7 +32,6 @@ public class MinesweeperGame {
     public static void FinishCurrentGame(){
         minesweeperGame = null;
     }
-
 
     private MinesweeperGame(GameLevel gl) {
         gameLevel = gl;

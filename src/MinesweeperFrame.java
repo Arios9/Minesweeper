@@ -20,7 +20,6 @@ public class MinesweeperFrame extends JFrame{
         setResizable(false);
         setSize(frameWidth, frameHeight);
         setLocationRelativeTo(null);
-        setComponents();
         setVisible(true);
         setOnCloseListener();
     }
@@ -34,10 +33,10 @@ public class MinesweeperFrame extends JFrame{
         });
     }
 
-    private void setComponents() {
+    public void setComponents() {
         add(boardPanel =new BoardPanel(), BorderLayout.PAGE_END);
-        add(flagsLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_START);
-        add(timeLabel =new HeaderLabel(getWidth()),BorderLayout.LINE_END);
+        add(flagsLabel =new HeaderLabel(),BorderLayout.LINE_START);
+        add(timeLabel =new HeaderLabel(),BorderLayout.LINE_END);
         add(restartButton =new RestartButton(),BorderLayout.CENTER);
     }
 
