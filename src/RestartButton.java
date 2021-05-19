@@ -5,13 +5,15 @@ import java.awt.event.ActionListener;
 
 public class RestartButton extends JButton implements ActionListener {
 
+    public static final int width = 100;
+
     public static final ImageIcon smileFace =new ImageIcon(".\\src\\images\\smileface.png");
     public static final ImageIcon pressedFace =new ImageIcon(".\\src\\images\\pressedface.png");
     public static final ImageIcon loseFace =new ImageIcon(".\\src\\images\\loseface.png");
     public static final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
 
     public RestartButton(){
-        setPreferredSize(new Dimension(100,100));
+        setPreferredSize(new Dimension(width, MinesweeperFrame.headerHeight));
         addActionListener(this);
         setBackground(Color.WHITE);
     }

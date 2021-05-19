@@ -7,7 +7,7 @@ public class MinesweeperFrame extends JFrame{
     public static HeaderLabel flagsLabel;
     public static HeaderLabel timeLabel;
     public static RestartButton restartButton;
-    private final int frameHeight, frameWidth, headerHeight;
+    public static int frameHeight, frameWidth, headerHeight;
 
     public MinesweeperFrame() {
         headerHeight = 100;
