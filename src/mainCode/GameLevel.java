@@ -1,3 +1,5 @@
+package mainCode;
+
 public class GameLevel {
 
     private final String levelText;

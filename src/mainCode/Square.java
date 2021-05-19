@@ -1,7 +1,14 @@
+package mainCode;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import static mainCode.MinesweeperFrame.flagsLabel;
+import static mainCode.MinesweeperFrame.restartButton;
+import static mainCode.MinesweeperGame.GameInstance;
+import static mainCode.MinesweeperGame.numberOfUnusedFlags;
 
 
 public class Square extends JButton implements MouseListener {
@@ -26,26 +33,26 @@ public class Square extends JButton implements MouseListener {
             if(!hasFlag){
                 setIcon(flagIcon);
                 hasFlag = true;
-                MinesweeperFrame.flagsLabel.setText(String.valueOf(--MinesweeperGame.numberOfUnusedFlags));
+                flagsLabel.setText(String.valueOf(--numberOfUnusedFlags));
             }else{
                 setIcon(null);
                 hasFlag = false;
-                MinesweeperFrame.flagsLabel.setText(String.valueOf(++MinesweeperGame.numberOfUnusedFlags));
+                flagsLabel.setText(String.valueOf(++numberOfUnusedFlags));
             }
         }
         if(SwingUtilities.isLeftMouseButton(me)){
             if(!hasFlag)
-                if(hasBomb) MinesweeperGame.GameInstance().setBombsEverywhere();
-                else MinesweeperGame.GameInstance().recursion(this);
+                if(hasBomb) GameInstance().setBombsEverywhere();
+                else GameInstance().recursion(this);
         }
     }
     @Override public void mousePressed(MouseEvent me) {
         if(SwingUtilities.isLeftMouseButton(me))
-        MinesweeperFrame.restartButton.setIcon(RestartButton.pressedFace);
+        restartButton.setIcon(RestartButton.pressedFace);
     }
     @Override public void mouseReleased(MouseEvent me) {
         if(SwingUtilities.isLeftMouseButton(me))
-        MinesweeperFrame.restartButton.setIcon(RestartButton.smileFace);
+        restartButton.setIcon(RestartButton.smileFace);
     }
     @Override public void mouseEntered(MouseEvent me) {
         setBackground(Color.LIGHT_GRAY);

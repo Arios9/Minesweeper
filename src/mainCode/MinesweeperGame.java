@@ -1,7 +1,10 @@
+package mainCode;
 
 import java.util.Random;
 import java.util.Timer;
 import javax.swing.ImageIcon;
+
+import static mainCode.MinesweeperFrame.*;
 
 public class MinesweeperGame {
 
@@ -44,7 +47,7 @@ public class MinesweeperGame {
 
     public void startNewGame() {
         initializeCountingVariables();
-        MinesweeperFrame.boardPanel.setTheBoard();
+        boardPanel.setTheBoard();
         createBombs();
         countBombsAroundButtons();
         createTimer();
@@ -57,8 +60,8 @@ public class MinesweeperGame {
     }
 
     private void setComponentsContent() {
-        MinesweeperFrame.restartButton.setIcon(RestartButton.smileFace);
-        MinesweeperFrame.flagsLabel.setText(Integer.toString(numberOfUnusedFlags));
+        restartButton.setIcon(RestartButton.smileFace);
+        flagsLabel.setText(Integer.toString(numberOfUnusedFlags));
     }
 
     private void createTimer() {
@@ -103,7 +106,7 @@ public class MinesweeperGame {
             for(int j = 0; j< arrayWidth; j++)
                 squares[i][j].removeMouseListener(squares[i][j]);
         timer.cancel();
-        MinesweeperFrame.restartButton.setIcon(icon);
+        restartButton.setIcon(icon);
     }
 
     

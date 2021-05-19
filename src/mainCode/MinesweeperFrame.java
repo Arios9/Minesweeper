@@ -1,5 +1,10 @@
+package mainCode;
+
 import javax.swing.*;
 import java.awt.*;
+
+import static mainCode.MinesweeperGame.FinishCurrentGame;
+import static mainCode.MinesweeperGame.gameLevel;
 
 public class MinesweeperFrame extends JFrame{
 
@@ -11,8 +16,8 @@ public class MinesweeperFrame extends JFrame{
 
     public MinesweeperFrame() {
         headerHeight = 100;
-        frameHeight = MinesweeperGame.gameLevel.getNumberOfSquaresInHeight() * 50 + headerHeight;
-        frameWidth = MinesweeperGame.gameLevel.getNumberOfSquaresInWidth() * 50;
+        frameHeight = gameLevel.getNumberOfSquaresInHeight() * 50 + headerHeight;
+        frameWidth = gameLevel.getNumberOfSquaresInWidth() * 50;
         setFrame();
     }
 
@@ -28,7 +33,7 @@ public class MinesweeperFrame extends JFrame{
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                MinesweeperGame.FinishCurrentGame();
+                FinishCurrentGame();
             }
         });
     }

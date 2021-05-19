@@ -1,7 +1,11 @@
+package mainCode;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static mainCode.MinesweeperGame.createNewGame;
 
 public class GameLevelButton extends JButton implements ActionListener {
 
@@ -24,7 +28,7 @@ public class GameLevelButton extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            MinesweeperGame.createNewGame(gameLevel);
+            createNewGame(gameLevel);
         } catch (GameInProgressException exception) {
             showErrorMessage(exception.getMessage());
         }

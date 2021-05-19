@@ -1,4 +1,8 @@
+package mainCode;
+
 import java.util.TimerTask;
+
+import static mainCode.MinesweeperFrame.timeLabel;
 
 public class MyTimerTask extends TimerTask {
 
@@ -6,7 +10,7 @@ public class MyTimerTask extends TimerTask {
     private HeaderLabel timeHeaderLabel;
 
     public MyTimerTask() {
-        timeHeaderLabel = MinesweeperFrame.timeLabel;
+        timeHeaderLabel = timeLabel;
     }
 
     @Override
