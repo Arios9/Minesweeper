@@ -12,9 +12,9 @@ public class MinesweeperGame {
     public static Timer timer;
     public static int numberOfUnusedFlags, remainingButtons;
 
-    public static void createNewGame(GameLevel gameLevel) throws Exception {
+    public static void createNewGame(GameLevel gameLevel) throws GameInProgressException {
         if(minesweeperGame != null)
-            throw new Exception();
+            throw new GameInProgressException();
         minesweeperGame = new MinesweeperGame(gameLevel);
         minesweeperFrame = new MinesweeperFrame();
         minesweeperGame.startNewGame();
