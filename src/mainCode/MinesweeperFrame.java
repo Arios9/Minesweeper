@@ -29,6 +29,13 @@ public class MinesweeperFrame extends JFrame{
         setOnCloseListener();
     }
 
+    public void setComponents() {
+        add(boardPanel =new BoardPanel(), BorderLayout.PAGE_END);
+        add(flagsLabel =new HeaderLabel(),BorderLayout.LINE_START);
+        add(timeLabel =new HeaderLabel(),BorderLayout.LINE_END);
+        add(restartButton =new RestartButton(),BorderLayout.CENTER);
+    }
+
     private void setOnCloseListener() {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -36,13 +43,6 @@ public class MinesweeperFrame extends JFrame{
                 FinishCurrentGame();
             }
         });
-    }
-
-    public void setComponents() {
-        add(boardPanel =new BoardPanel(), BorderLayout.PAGE_END);
-        add(flagsLabel =new HeaderLabel(),BorderLayout.LINE_START);
-        add(timeLabel =new HeaderLabel(),BorderLayout.LINE_END);
-        add(restartButton =new RestartButton(),BorderLayout.CENTER);
     }
 
 }
