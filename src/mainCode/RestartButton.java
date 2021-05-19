@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static mainCode.MinesweeperFrame.boardPanel;
+import static mainCode.MinesweeperFrame.headerHeight;
 import static mainCode.MinesweeperGame.GameInstance;
 import static mainCode.MinesweeperGame.timer;
 
@@ -20,7 +21,7 @@ public class RestartButton extends JButton implements ActionListener {
     public static final ImageIcon winFace =new ImageIcon(".\\src\\images\\winface.png");
 
     public RestartButton(){
-        setPreferredSize(new Dimension(buttonWidth, MinesweeperFrame.headerHeight));
+        setPreferredSize(new Dimension(buttonWidth, headerHeight));
         addActionListener(this);
         setBackground(Color.WHITE);
     }

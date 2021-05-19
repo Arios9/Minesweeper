@@ -8,10 +8,12 @@ import static mainCode.MinesweeperGame.*;
 public class BoardPanel extends JPanel {
 
     public BoardPanel() {
-        int boardHeight = gameLevel.getNumberOfSquaresInHeight() * 50;
-        int boardWidth = gameLevel.getNumberOfSquaresInWidth() * 50;
+        int squaresInHeight = gameLevel.getNumberOfSquaresInHeight();
+        int squaresInWidth = gameLevel.getNumberOfSquaresInWidth();
+        int boardHeight = squaresInHeight * 50;
+        int boardWidth = squaresInWidth * 50;
         setPreferredSize(new Dimension(boardWidth, boardHeight));
-        setLayout(new GridLayout(gameLevel.getNumberOfSquaresInHeight(), gameLevel.getNumberOfSquaresInWidth()));
+        setLayout(new GridLayout(squaresInHeight, squaresInWidth));
     }
 
     public void setTheBoard() {
