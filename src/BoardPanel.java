@@ -13,8 +13,8 @@ public class BoardPanel extends JPanel {
     }
 
     public void setTheBoard() {
-        for(int i = 0; i< MinesweeperGame.gameLevel.getNumberOfSquaresInHeight(); i++)
-            for(int j = 0; j< MinesweeperGame.gameLevel.getNumberOfSquaresInWidth(); j++)
+        for(int i = 0; i< MinesweeperGame.arrayHeight; i++)
+            for(int j = 0; j< MinesweeperGame.arrayWidth; j++)
                 add(MinesweeperGame.squares[i][j]=new Square(i,j));
     }
 }

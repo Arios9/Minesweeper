@@ -11,6 +11,7 @@ public class MinesweeperGame {
     public static Square[][] squares;
     public static Timer timer;
     public static int numberOfUnusedFlags, remainingButtons;
+    public static int arrayHeight, arrayWidth;
 
     public static void createNewGame(GameLevel gameLevel) throws GameInProgressException {
         if(minesweeperGame != null)
@@ -35,7 +36,9 @@ public class MinesweeperGame {
 
     private MinesweeperGame(GameLevel gl) {
         gameLevel = gl;
-        squares = new Square[gameLevel.getNumberOfSquaresInHeight()][gameLevel.getNumberOfSquaresInWidth()];
+        arrayHeight = gameLevel.getNumberOfSquaresInHeight();
+        arrayWidth = gameLevel.getNumberOfSquaresInWidth();
+        squares = new Square[arrayHeight][arrayWidth];
     }
 
 
@@ -77,18 +80,18 @@ public class MinesweeperGame {
     }
 
     private void countBombsAroundButtons() {
-        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
-            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
+        for(int i = 0; i< arrayHeight; i++)
+            for(int j = 0; j< arrayWidth; j++)
                 for(int k=i-1; k<=i+1; k++)
                     for(int s=j-1; s<=j+1; s++)
-                         if((k>=0&&s>=0&&k< gameLevel.getNumberOfSquaresInHeight() &&s< gameLevel.getNumberOfSquaresInWidth())&&!(k==i&&s==j))
+                         if((k>=0&&s>=0&&k< arrayHeight &&s< arrayWidth)&&!(k==i&&s==j))
                              if(squares[k][s].HasBomb())
                                  squares[i][j].incrementBombsAroundIt();
     }
     
     public void setBombsEverywhere(){
-        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
-            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
+        for(int i = 0; i< arrayHeight; i++)
+            for(int j = 0; j< arrayWidth; j++)
                 if(squares[i][j].HasBomb() && !squares[i][j].HasFlag())
                     squares[i][j].setBombIcon();
         gameOver(RestartButton.loseFace);
@@ -96,8 +99,8 @@ public class MinesweeperGame {
     
     
     private void gameOver(ImageIcon icon) {
-        for(int i = 0; i< gameLevel.getNumberOfSquaresInHeight(); i++)
-            for(int j = 0; j< gameLevel.getNumberOfSquaresInWidth(); j++)
+        for(int i = 0; i< arrayHeight; i++)
+            for(int j = 0; j< arrayWidth; j++)
                 squares[i][j].removeMouseListener(squares[i][j]);
         timer.cancel();
         MinesweeperFrame.restartButton.setIcon(icon);
@@ -115,9 +118,9 @@ public class MinesweeperGame {
     private void recursionForButtonsAround(Square square) {
         int i=square.getI(),j=square.getJ();
         for(int k=i-1; k<=i+1; k++){
-            if(k<0||k == gameLevel.getNumberOfSquaresInHeight())continue;
+            if(k<0||k == arrayHeight)continue;
             for(int s=j-1; s<=j+1; s++){
-                if(s<0||s == gameLevel.getNumberOfSquaresInWidth())continue;
+                if(s<0||s == arrayWidth)continue;
                 if(!squares[k][s].HasDoneRecursion())
                 recursion(squares[k][s]);
             }
