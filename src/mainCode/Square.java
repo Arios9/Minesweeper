@@ -5,10 +5,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import static mainCode.MinesweeperFrame.flagsLabel;
-import static mainCode.MinesweeperFrame.restartButton;
-import static mainCode.MinesweeperGame.GameInstance;
-import static mainCode.MinesweeperGame.numberOfUnusedFlags;
+import static mainCode.MinesweeperFrame.*;
+import static mainCode.MinesweeperGame.*;
 
 
 public class Square extends JButton implements MouseListener {
@@ -30,22 +28,21 @@ public class Square extends JButton implements MouseListener {
 
     @Override public void mouseClicked(MouseEvent me) {
         if(SwingUtilities.isRightMouseButton(me)){
-            if(!hasFlag){
-                setIcon(flagIcon);
-                hasFlag = true;
-                flagsLabel.setText(String.valueOf(--numberOfUnusedFlags));
-            }else{
-                setIcon(null);
-                hasFlag = false;
-                flagsLabel.setText(String.valueOf(++numberOfUnusedFlags));
-            }
+            if(hasFlag)
+                removeFlag();
+            else
+                addFlag();
+            flagsLabel.setText(String.valueOf(numberOfUnusedFlags));
         }
         if(SwingUtilities.isLeftMouseButton(me)){
-            if(!hasFlag)
-                if(hasBomb) GameInstance().setBombsEverywhere();
-                else GameInstance().recursion(this);
+            if(hasFlag) return;
+            if(hasBomb)
+                GameInstance().setBombsEverywhere();
+            else
+                GameInstance().recursion(this);
         }
     }
+
     @Override public void mousePressed(MouseEvent me) {
         if(SwingUtilities.isLeftMouseButton(me))
         restartButton.setIcon(RestartButton.pressedFace);
@@ -110,13 +107,34 @@ public class Square extends JButton implements MouseListener {
         this.hasBomb = hasBomb;
     }
 
-    public void cancelButton() {
+    public void cancelIt() {
         hasDoneRecursion = true;
         setBackground(Color.LIGHT_GRAY);
         removeMouseListener(this);
+        remainingButtons--;
     }
 
     public void setBombIcon() {
         setIcon(bombIcon);
+    }
+
+    public boolean HasBombsAroundIt(){
+        return bombsAroundIt != 0;
+    }
+
+    public void setNumberText() {
+        setText(String.valueOf(bombsAroundIt));
+    }
+
+    private void addFlag() {
+        setIcon(flagIcon);
+        hasFlag = true;
+        numberOfUnusedFlags--;
+    }
+
+    private void removeFlag() {
+        setIcon(null);
+        hasFlag = false;
+        numberOfUnusedFlags++;
     }
 }

@@ -109,13 +109,21 @@ public class MinesweeperGame {
         restartButton.setIcon(icon);
     }
 
+    private void checkForWin() {
+        if(remainingButtons == gameLevel.getNumberOfBombs())
+            gameOver(RestartButton.winFace);
+    }
+
     
     public void recursion(Square square) {
-        if(square.HasFlag())return;
-        square.cancelButton();
-        if(square.getBombsAroundIt() !=0) square.setText(String.valueOf(square.getBombsAroundIt()));
-        else recursionForButtonsAround(square);
-        if(--remainingButtons == gameLevel.getNumberOfBombs()) gameOver(RestartButton.winFace);
+        if(square.HasFlag())
+            return;
+        square.cancelIt();
+        if(square.HasBombsAroundIt())
+            square.setNumberText();
+        else
+            recursionForButtonsAround(square);
+        checkForWin();
     }
 
     private void recursionForButtonsAround(Square square) {
@@ -129,5 +137,6 @@ public class MinesweeperGame {
             }
         }
     }
+
 
 }
