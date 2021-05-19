@@ -51,12 +51,8 @@ public class Square extends JButton implements MouseListener {
         if(SwingUtilities.isLeftMouseButton(me))
         restartButton.setIcon(RestartButton.smileFace);
     }
-    @Override public void mouseEntered(MouseEvent me) {
-        setBackground(Color.LIGHT_GRAY);
-    }
-    @Override public void mouseExited(MouseEvent me) {
-        setBackground(Color.GRAY);
-    }
+    @Override public void mouseEntered(MouseEvent me) {}
+    @Override public void mouseExited(MouseEvent me) {}
 
     private Color getColor() {
         return switch (bombsAroundIt) {
