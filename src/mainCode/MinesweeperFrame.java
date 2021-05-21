@@ -27,9 +27,10 @@ public class MinesweeperFrame extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
         setOnCloseListener();
+        setComponents();
     }
 
-    public void setComponents() {
+    private void setComponents() {
         add(boardPanel =new BoardPanel(), BorderLayout.PAGE_END);
         add(flagsLabel =new HeaderLabel(),BorderLayout.LINE_START);
         add(timeLabel =new HeaderLabel(),BorderLayout.LINE_END);

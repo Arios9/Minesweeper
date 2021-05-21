@@ -26,7 +26,6 @@ public class MinesweeperGame {
 
     private static void setFrame() {
         minesweeperFrame = new MinesweeperFrame();
-        minesweeperFrame.setComponents();
     }
 
     public static MinesweeperGame GameInstance()   {
@@ -35,6 +34,7 @@ public class MinesweeperGame {
 
     public static void FinishCurrentGame(){
         minesweeperGame = null;
+        timer.cancel();
     }
 
     private MinesweeperGame(GameLevel gl) {
@@ -46,11 +46,11 @@ public class MinesweeperGame {
 
 
     public void startNewGame() {
-        initializeCountingVariables();
         boardPanel.setTheBoard();
         createBombs();
         countBombsAroundButtons();
         createTimer();
+        initializeCountingVariables();
         setComponentsContent();
     }
 
@@ -110,8 +110,10 @@ public class MinesweeperGame {
     }
 
     private void checkForWin() {
-        if(remainingButtons == gameLevel.getNumberOfBombs())
+        if(remainingButtons == gameLevel.getNumberOfBombs()){
             gameOver(RestartButton.winFace);
+            HighScore.checkForHighScore();
+        }
     }
 
     
