@@ -14,6 +14,6 @@ public class MyTimerTask extends TimerTask {
 
     @Override
     public void run() {
-        timeLabel.reFresh(secondsPassed++);
+        timeLabel.reFresh(++secondsPassed);
     }
 }
