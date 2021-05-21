@@ -2,7 +2,7 @@ package mainCode;
 
 import java.util.TimerTask;
 
-import static mainCode.MinesweeperFrame.timeLabel;
+import static MinesweeperFramePackage.MinesweeperFrame.timeLabel;
 
 public class MyTimerTask extends TimerTask {
 

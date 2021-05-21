@@ -1,10 +1,10 @@
-package mainCode;
+package MinesweeperFramePackage;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static mainCode.MinesweeperFrame.*;
-import static mainCode.RestartButton.buttonWidth;
+import static MinesweeperFramePackage.MinesweeperFrame.*;
+import static MinesweeperFramePackage.RestartButton.buttonWidth;
 
 public class HeaderLabel extends JLabel {
 

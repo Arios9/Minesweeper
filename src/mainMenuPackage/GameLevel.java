@@ -1,4 +1,4 @@
-package mainCode;
+package mainMenuPackage;
 
 public class GameLevel {
 

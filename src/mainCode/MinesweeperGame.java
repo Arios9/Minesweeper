@@ -1,10 +1,15 @@
 package mainCode;
 
+import MinesweeperFramePackage.MinesweeperFrame;
+import MinesweeperFramePackage.RestartButton;
+import MinesweeperFramePackage.Square;
+import mainMenuPackage.GameLevel;
+
 import java.util.Random;
 import java.util.Timer;
 import javax.swing.ImageIcon;
 
-import static mainCode.MinesweeperFrame.*;
+import static MinesweeperFramePackage.MinesweeperFrame.*;
 
 public class MinesweeperGame {
 

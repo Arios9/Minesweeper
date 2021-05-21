@@ -1,10 +1,13 @@
-package mainCode;
+package mainMenuPackage;
+
+import mainCode.GameInProgressException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static mainMenuPackage.MainMenu.mainMenu;
 import static mainCode.MinesweeperGame.createNewGame;
 
 public class GameLevelButton extends JButton implements ActionListener {
@@ -22,7 +25,8 @@ public class GameLevelButton extends JButton implements ActionListener {
     public void setText(String string){
         super.setText(string);
         setForeground(Color.WHITE);
-        setFont(new Font("Arial",Font.BOLD,40));
+        setFont(new Font("Arial",Font.BOLD,30));
+        setPreferredSize(new Dimension(150 , 60));
     }
 
     @Override
@@ -36,7 +40,7 @@ public class GameLevelButton extends JButton implements ActionListener {
 
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(
-                MainMenu.mainMenu,
+                mainMenu,
                 message,
                 "Error",
                 JOptionPane.ERROR_MESSAGE

@@ -1,12 +1,12 @@
-package mainCode;
+package MinesweeperFramePackage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static mainCode.MinesweeperFrame.boardPanel;
-import static mainCode.MinesweeperFrame.headerHeight;
+import static MinesweeperFramePackage.MinesweeperFrame.boardPanel;
+import static MinesweeperFramePackage.MinesweeperFrame.headerHeight;
 import static mainCode.MinesweeperGame.GameInstance;
 import static mainCode.MinesweeperGame.timer;
 

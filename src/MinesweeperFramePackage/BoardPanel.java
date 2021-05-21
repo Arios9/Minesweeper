@@ -1,4 +1,4 @@
-package mainCode;
+package MinesweeperFramePackage;
 
 import javax.swing.*;
 import java.awt.*;
