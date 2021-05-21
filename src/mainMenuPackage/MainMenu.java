@@ -23,7 +23,12 @@ public class MainMenu extends JFrame {
         setLocationRelativeTo(null);
         setComponents();
         setGameLevels();
-        //setLayout(new GridLayout(1,3));
+    }
+
+    private void setComponents() {
+        jPanel = new JPanel();
+        add(jPanel);
+        jPanel.add(new TitleLabel());
     }
 
     private void setGameLevels() {
@@ -34,12 +39,6 @@ public class MainMenu extends JFrame {
         jPanel.add(new GameLevelButton(easyLevel));
         jPanel.add(new GameLevelButton(mediumLevel));
         jPanel.add(new GameLevelButton(hardLevel));
-    }
-
-    private void setComponents() {
-        jPanel = new JPanel();
-        add(jPanel);
-        jPanel.add(new TitleLabel());
     }
 
 
