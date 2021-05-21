@@ -123,7 +123,7 @@ public class MinesweeperGame {
 
     
     public void recursion(Square square) {
-        if(square.HasFlag())
+        if(square.canNotDoRecursion())
             return;
         square.cancelIt();
         if(square.HasBombsAroundIt())
@@ -139,7 +139,6 @@ public class MinesweeperGame {
             if(k<0||k == arrayHeight)continue;
             for(int s=j-1; s<=j+1; s++){
                 if(s<0||s == arrayWidth)continue;
-                if(!squares[k][s].HasDoneRecursion())
                 recursion(squares[k][s]);
             }
         }
