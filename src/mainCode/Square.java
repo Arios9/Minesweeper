@@ -11,8 +11,8 @@ import static mainCode.MinesweeperGame.*;
 
 public class Square extends JButton implements MouseListener {
 
-    private final ImageIcon bombIcon=new ImageIcon(".\\src\\images\\bomb100px.png");
-    private final ImageIcon flagIcon=new ImageIcon(".\\src\\images\\flag100px.png");
+    private final ImageIcon bombIcon=new ImageIcon(".\\src\\images\\bomb25px.png");
+    private final ImageIcon flagIcon=new ImageIcon(".\\src\\images\\flag25px.png");
 
 
     private final int i,j;
