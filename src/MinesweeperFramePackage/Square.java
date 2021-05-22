@@ -56,27 +56,27 @@ public class Square extends JButton implements MouseListener {
     }
 
     private void recursionForButtonsAroundIt() {
+        LoopAroundIt((a, b) -> squares[a][b].recursion());
+    }
+
+    public void countBombsAroundButtonIt() {
+        LoopAroundIt((a, b) ->{
+            if(squares[a][b].hasBomb)
+            bombsAroundIt++;
+        });
+    }
+
+    private void LoopAroundIt(AroundSquare aroundSquare) {
         for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
             if(a<0)continue;
             for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
                 if(b<0)continue;
                 if(squares[a][b].equals(this))continue;
-                squares[a][b].recursion();
+                aroundSquare.method(a,b);
             }
         }
     }
 
-    public void countBombsAroundButtonIt() {
-        for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
-            if(a<0)continue;
-            for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
-                if(b<0)continue;
-                if(squares[a][b].equals(this))continue;
-                if(squares[a][b].hasBomb)
-                    squares[i][j].incrementBombsAroundIt();
-            }
-        }
-    }
 
     @Override public void mousePressed(MouseEvent me) {
         if(SwingUtilities.isLeftMouseButton(me))
@@ -106,10 +106,6 @@ public class Square extends JButton implements MouseListener {
         setFont(new Font("Arial",Font.BOLD,25));
     }
 
-    public void incrementBombsAroundIt(){
-        bombsAroundIt++;
-    }
-
     public boolean HasBomb() {
         return hasBomb;
     }
@@ -119,7 +115,7 @@ public class Square extends JButton implements MouseListener {
     }
 
     public void setBombIcon() {
-        if(!hasFlag)
+        if(hasBomb && !hasFlag)
         setIcon(bombIcon);
     }
 

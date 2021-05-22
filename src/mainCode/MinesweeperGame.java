@@ -1,5 +1,6 @@
 package mainCode;
 
+import MinesweeperFramePackage.ArrayLoop;
 import MinesweeperFramePackage.MinesweeperFrame;
 import MinesweeperFramePackage.RestartButton;
 import MinesweeperFramePackage.Square;
@@ -88,25 +89,24 @@ public class MinesweeperGame {
     }
 
     private void countBombsAroundButtons() {
-        for(int i = 0; i< arrayHeight; i++)
-            for(int j = 0; j< arrayWidth; j++)
-                squares[i][j].countBombsAroundButtonIt();
+        loopTheArray((i, j) -> squares[i][j].countBombsAroundButtonIt());
     }
 
     public void setBombsEverywhere(){
-        for(int i = 0; i< arrayHeight; i++)
-            for(int j = 0; j< arrayWidth; j++)
-                if(squares[i][j].HasBomb())
-                    squares[i][j].setBombIcon();
+        loopTheArray((i, j) -> squares[i][j].setBombIcon());
         gameOver(RestartButton.loseFace);
     }
 
     private void gameOver(ImageIcon icon) {
-        for(int i = 0; i< arrayHeight; i++)
-            for(int j = 0; j< arrayWidth; j++)
-                squares[i][j].removeMouseListener(squares[i][j]);
+        loopTheArray((i, j) -> squares[i][j].removeMouseListener(squares[i][j]));
         timer.cancel();
         restartButton.setIcon(icon);
+    }
+
+    private void loopTheArray(ArrayLoop arrayLoop){
+        for(int i = 0; i< arrayHeight; i++)
+            for(int j = 0; j< arrayWidth; j++)
+                arrayLoop.method(i,j);
     }
 
     public void checkForWin() {
@@ -115,5 +115,6 @@ public class MinesweeperGame {
             HighScore.checkForHighScore();
         }
     }
+
 
 }
