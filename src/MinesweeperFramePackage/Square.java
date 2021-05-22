@@ -38,8 +38,10 @@ public class Square extends JButton implements MouseListener {
             if(hasFlag) return;
             if(hasBomb)
                 GameInstance().setBombsEverywhere();
-            else
+            else{
                 GameInstance().recursion(this);
+                GameInstance().checkForWin();
+            }
         }
     }
 

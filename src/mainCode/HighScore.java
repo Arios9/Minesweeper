@@ -16,8 +16,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import static mainCode.MinesweeperGame.gameLevel;
+import java.util.ArrayList;
+
+import static mainCode.MinesweeperGame.currentGameLevel;
 import static mainCode.MyTimerTask.secondsPassed;
+import static mainMenuPackage.MainMenu.gameLevels;
 
 
 public class HighScore {
@@ -56,66 +59,47 @@ public class HighScore {
 
     private static void initializeVariables() {
         seconds = secondsPassed;
-        level = gameLevel.getLevelText();
+        level = currentGameLevel.getLevelText();
     }
 
     private static void makeProperActions() throws IOException, SAXException {
         if(file.isFile())
             makeProperActionsToExistingFile();
         else
-            createDocumentAndNewElement();
+            createNewXMLDocument();
     }
 
     private static void makeProperActionsToExistingFile() throws IOException, SAXException {
         parseFileAndItsElements(file);
-        makeProperActionsToTheDocument();
+        setTheLevelElement();
+        setNewValueToElementIfTimeIsBetter();
     }
 
-    private static void makeProperActionsToTheDocument() {
-        if(ElementExist())
-            setNewValueToElementIfTimeIsBetter();
-        else
-            createNewElementLevelRecord();
-    }
-
-    private static boolean ElementExist() {
-        return nodeList.getLength() > 0;
+    private static void setTheLevelElement() {
+        nodeList = root.getElementsByTagName(level);
     }
 
     private static void setNewValueToElementIfTimeIsBetter() {
         Node node = nodeList.item(0);
-        int currentHighScore = getTextContentFromNodeToInt(node);
-        if (seconds < currentHighScore)
-            node.setTextContent(String.valueOf(seconds));
-    }
-
-    private static int getTextContentFromNodeToInt(Node node){
         String textContent = node.getTextContent();
-        return Integer.parseInt(textContent);
-    }
-
-    private static void createDocumentAndNewElement() {
-        createNewXMLDocument();
-        createNewElementLevelRecord();
+        if(textContent.equals("")||seconds<Integer.parseInt(textContent))
+            node.setTextContent(String.valueOf(seconds));
     }
 
     private static void parseFileAndItsElements(File file) throws IOException, SAXException {
         document = documentBuilder.parse(file);
         root = document.getDocumentElement();
-        nodeList = root.getElementsByTagName(level);
-    }
-
-    private static void createNewElementLevelRecord() {
-        Element element = document.createElement(level);
-        String string = String.valueOf(seconds);
-        element.setTextContent(string);
-        root.appendChild(element);
     }
 
     private static void createNewXMLDocument() {
         document = documentBuilder.newDocument();
         root = document.createElement(ROOT_TAG_NAME);
         document.appendChild(root);
+        gameLevels.forEach(gameLevel -> {
+            String levelText = gameLevel.getLevelText();
+            Element element = document.createElement(levelText);
+            root.appendChild(element);
+        });
     }
 
     private static void outPutDocumentToFile() throws FileNotFoundException, TransformerException {
@@ -125,5 +109,18 @@ public class HighScore {
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         StreamResult streamResult = new StreamResult(fileOutputStream);
         transformer.transform(domSource, streamResult);
+    }
+
+    public static ArrayList<String> getRecords() throws ParserConfigurationException, IOException, SAXException {
+        createDocumentBuilder();
+        if(file.isFile()){
+                parseFileAndItsElements(file);
+                NodeList childNodes = root.getChildNodes();
+                ArrayList<String> strings = new ArrayList<>();
+                for(int i=0; i<childNodes.getLength(); i++)
+                    strings.add(childNodes.item(i).getTextContent());
+                return strings;
+        }
+        return null;
     }
 }

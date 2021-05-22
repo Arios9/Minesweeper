@@ -15,7 +15,7 @@ public class MinesweeperGame {
 
     private static MinesweeperGame minesweeperGame = null;
     public static MinesweeperFrame minesweeperFrame;
-    public static GameLevel gameLevel;
+    public static GameLevel currentGameLevel;
     public static Square[][] squares;
     public static Timer timer;
     public static int numberOfUnusedFlags, remainingButtons;
@@ -43,9 +43,9 @@ public class MinesweeperGame {
     }
 
     private MinesweeperGame(GameLevel gl) {
-        gameLevel = gl;
-        arrayHeight = gameLevel.getNumberOfSquaresInHeight();
-        arrayWidth = gameLevel.getNumberOfSquaresInWidth();
+        currentGameLevel = gl;
+        arrayHeight = currentGameLevel.getNumberOfSquaresInHeight();
+        arrayWidth = currentGameLevel.getNumberOfSquaresInWidth();
         squares = new Square[arrayHeight][arrayWidth];
     }
 
@@ -60,8 +60,8 @@ public class MinesweeperGame {
     }
 
     private void initializeCountingVariables() {
-        numberOfUnusedFlags = gameLevel.getNumberOfBombs();
-        remainingButtons = gameLevel.getNumberOfSquaresInHeight() * gameLevel.getNumberOfSquaresInWidth();
+        numberOfUnusedFlags = currentGameLevel.getNumberOfBombs();
+        remainingButtons = currentGameLevel.getNumberOfSquaresInHeight() * currentGameLevel.getNumberOfSquaresInWidth();
     }
 
     private void setComponentsContent() {
@@ -77,9 +77,9 @@ public class MinesweeperGame {
     private void createBombs() {
         Random rand = new Random();
         int bombs=0;
-        while(bombs < gameLevel.getNumberOfBombs()){
-            int i=rand.nextInt(gameLevel.getNumberOfSquaresInHeight());
-            int j=rand.nextInt(gameLevel.getNumberOfSquaresInWidth());
+        while(bombs < currentGameLevel.getNumberOfBombs()){
+            int i=rand.nextInt(currentGameLevel.getNumberOfSquaresInHeight());
+            int j=rand.nextInt(currentGameLevel.getNumberOfSquaresInWidth());
             if(!squares[i][j].HasBomb()){
                 squares[i][j].setHasBomb(true);
                 bombs++;
@@ -114,8 +114,8 @@ public class MinesweeperGame {
         restartButton.setIcon(icon);
     }
 
-    private void checkForWin() {
-        if(remainingButtons == gameLevel.getNumberOfBombs()){
+    public void checkForWin() {
+        if(remainingButtons == currentGameLevel.getNumberOfBombs()){
             gameOver(RestartButton.winFace);
             HighScore.checkForHighScore();
         }
@@ -129,7 +129,6 @@ public class MinesweeperGame {
                 square.setNumberText();
             else
                 recursionForButtonsAround(square);
-            checkForWin();
         }
     }
 

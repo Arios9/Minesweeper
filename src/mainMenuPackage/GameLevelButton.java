@@ -17,6 +17,7 @@ public class GameLevelButton extends JButton implements ActionListener {
     public GameLevelButton(GameLevel gameLevel) {
         this.gameLevel = gameLevel;
         setBackground(Color.BLACK);
+        setPreferredSize(new Dimension(150 , 60));
         setText(gameLevel.getLevelText());
         addActionListener(this);
     }
@@ -26,7 +27,6 @@ public class GameLevelButton extends JButton implements ActionListener {
         super.setText(string);
         setForeground(Color.WHITE);
         setFont(new Font("Arial",Font.BOLD,30));
-        setPreferredSize(new Dimension(150 , 60));
     }
 
     @Override
