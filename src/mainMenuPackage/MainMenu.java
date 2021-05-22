@@ -12,12 +12,11 @@ import java.util.ArrayList;
 public class MainMenu extends JFrame {
 
     static MainMenu mainMenu;
+    private JPanel jPanel;
     static final int mainFrameWidth = 600;
     private static final int mainFrameHeight = 500;
     public static ArrayList <GameLevel> gameLevels;
     private ArrayList <RecordLabel> recordLabels;
-
-    private JPanel jPanel;
 
     public static void main(String[] args) {
         mainMenu = new MainMenu();
@@ -45,7 +44,7 @@ public class MainMenu extends JFrame {
 
     private void setGameLevels() {
         gameLevels = new ArrayList<>();
-        gameLevels.add(new GameLevel("Easy", 9, 9, 1));
+        gameLevels.add(new GameLevel("Easy", 9, 9, 10));
         gameLevels.add(new GameLevel("Medium", 16, 16, 40));
         gameLevels.add(new GameLevel("Hard", 16, 30, 99));
         gameLevels.forEach(gameLevel -> jPanel.add(new GameLevelButton(gameLevel)));
@@ -59,15 +58,12 @@ public class MainMenu extends JFrame {
 
     private void setRecordsToLabels() {
         try {
-            ArrayList<String> records = HighScore.getRecords();
+            ArrayList <String> records = HighScore.getRecords();
             for(int i=0; i<records.size(); i++){
-                recordLabels.get(i).setText(records.get(i));
+                if(!records.get(i).equals(""))
+                    recordLabels.get(i).setText(records.get(i));
             }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

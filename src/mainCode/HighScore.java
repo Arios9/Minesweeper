@@ -27,8 +27,6 @@ public class HighScore {
 
     private static final String FILE_PATH = "src/files/records.xml";
     private static final String ROOT_TAG_NAME = "record";
-    private static String level;
-    private static int seconds;
     private static DocumentBuilderFactory documentBuilderFactory;
     private static DocumentBuilder documentBuilder;
     private static Document document;
@@ -46,7 +44,6 @@ public class HighScore {
 
     private static void tryingIsTheFirstStepToFailure() throws ParserConfigurationException, IOException, SAXException, TransformerException {
         createDocumentBuilder();
-        initializeVariables();
         makeProperActions();
         outPutDocumentToFile();
     }
@@ -57,38 +54,12 @@ public class HighScore {
         file = new File(FILE_PATH);
     }
 
-    private static void initializeVariables() {
-        seconds = secondsPassed;
-        level = currentGameLevel.getLevelText();
-    }
-
     private static void makeProperActions() throws IOException, SAXException {
-        if(file.isFile())
-            makeProperActionsToExistingFile();
-        else
+        if(!file.isFile())
             createNewXMLDocument();
-    }
-
-    private static void makeProperActionsToExistingFile() throws IOException, SAXException {
-        parseFileAndItsElements(file);
-        setTheLevelElement();
+        else
+            parseFileAndItsElements(file);
         setNewValueToElementIfTimeIsBetter();
-    }
-
-    private static void setTheLevelElement() {
-        nodeList = root.getElementsByTagName(level);
-    }
-
-    private static void setNewValueToElementIfTimeIsBetter() {
-        Node node = nodeList.item(0);
-        String textContent = node.getTextContent();
-        if(textContent.equals("")||seconds<Integer.parseInt(textContent))
-            node.setTextContent(String.valueOf(seconds));
-    }
-
-    private static void parseFileAndItsElements(File file) throws IOException, SAXException {
-        document = documentBuilder.parse(file);
-        root = document.getDocumentElement();
     }
 
     private static void createNewXMLDocument() {
@@ -102,6 +73,20 @@ public class HighScore {
         });
     }
 
+    private static void parseFileAndItsElements(File file) throws IOException, SAXException {
+        document = documentBuilder.parse(file);
+        root = document.getDocumentElement();
+    }
+
+    private static void setNewValueToElementIfTimeIsBetter() {
+        String level = currentGameLevel.getLevelText();
+        nodeList = root.getElementsByTagName(level);
+        Node node = nodeList.item(0);
+        String textContent = node.getTextContent();
+        if(textContent.equals("")||secondsPassed<Integer.parseInt(textContent))
+            node.setTextContent(String.valueOf(secondsPassed));
+    }
+
     private static void outPutDocumentToFile() throws FileNotFoundException, TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -111,16 +96,20 @@ public class HighScore {
         transformer.transform(domSource, streamResult);
     }
 
-    public static ArrayList<String> getRecords() throws ParserConfigurationException, IOException, SAXException {
-        createDocumentBuilder();
-        if(file.isFile()){
+    public static ArrayList<String> getRecords() throws Exception {
+        try {
+            createDocumentBuilder();
+            if(file.isFile()){
                 parseFileAndItsElements(file);
                 NodeList childNodes = root.getChildNodes();
                 ArrayList<String> strings = new ArrayList<>();
                 for(int i=0; i<childNodes.getLength(); i++)
                     strings.add(childNodes.item(i).getTextContent());
                 return strings;
+            }
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
         }
-        return null;
+        throw new Exception();
     }
 }
