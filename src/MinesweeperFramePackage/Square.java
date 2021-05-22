@@ -134,7 +134,7 @@ public class Square extends JButton implements MouseListener {
         remainingButtons--;
     }
 
-    public boolean canNotDoRecursion() {
-        return hasDoneRecursion || hasFlag ;
+    public boolean canDoRecursion() {
+        return !hasDoneRecursion && !hasFlag ;
     }
 }

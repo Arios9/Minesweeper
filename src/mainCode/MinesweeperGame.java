@@ -123,14 +123,14 @@ public class MinesweeperGame {
 
     
     public void recursion(Square square) {
-        if(square.canNotDoRecursion())
-            return;
-        square.cancelIt();
-        if(square.HasBombsAroundIt())
-            square.setNumberText();
-        else
-            recursionForButtonsAround(square);
-        checkForWin();
+        if(square.canDoRecursion()){
+            square.cancelIt();
+            if(square.HasBombsAroundIt())
+                square.setNumberText();
+            else
+                recursionForButtonsAround(square);
+            checkForWin();
+        }
     }
 
     private void recursionForButtonsAround(Square square) {
