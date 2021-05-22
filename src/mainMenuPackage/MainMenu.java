@@ -1,11 +1,8 @@
 package mainMenuPackage;
 
 import mainCode.HighScore;
-import org.xml.sax.SAXException;
-
 import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 
@@ -16,7 +13,7 @@ public class MainMenu extends JFrame {
     static final int mainFrameWidth = 600;
     private static final int mainFrameHeight = 500;
     public static ArrayList <GameLevel> gameLevels;
-    private ArrayList <RecordLabel> recordLabels;
+    private static ArrayList <RecordLabel> recordLabels;
 
     public static void main(String[] args) {
         mainMenu = new MainMenu();
@@ -56,14 +53,14 @@ public class MainMenu extends JFrame {
         recordLabels.forEach(recordLabel -> jPanel.add(recordLabel));
     }
 
-    private void setRecordsToLabels() {
+    public static void setRecordsToLabels() {
         try {
             ArrayList <String> records = HighScore.getRecords();
             for(int i=0; i<records.size(); i++){
                 if(!records.get(i).equals(""))
                     recordLabels.get(i).setText(records.get(i));
             }
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

@@ -21,17 +21,16 @@ import java.util.ArrayList;
 import static mainCode.MinesweeperGame.currentGameLevel;
 import static mainCode.MyTimerTask.secondsPassed;
 import static mainMenuPackage.MainMenu.gameLevels;
+import static mainMenuPackage.MainMenu.setRecordsToLabels;
 
 
 public class HighScore {
 
     private static final String FILE_PATH = "src/files/records.xml";
     private static final String ROOT_TAG_NAME = "record";
-    private static DocumentBuilderFactory documentBuilderFactory;
     private static DocumentBuilder documentBuilder;
     private static Document document;
     private static Element root;
-    private static NodeList nodeList;
     private static File file;
 
     public static void checkForHighScore() {
@@ -46,10 +45,11 @@ public class HighScore {
         createDocumentBuilder();
         makeProperActions();
         outPutDocumentToFile();
+        setRecordsToLabels();
     }
 
     private static void createDocumentBuilder() throws ParserConfigurationException {
-        documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilder = documentBuilderFactory.newDocumentBuilder();
         file = new File(FILE_PATH);
     }
@@ -80,7 +80,7 @@ public class HighScore {
 
     private static void setNewValueToElementIfTimeIsBetter() {
         String level = currentGameLevel.getLevelText();
-        nodeList = root.getElementsByTagName(level);
+        NodeList nodeList = root.getElementsByTagName(level);
         Node node = nodeList.item(0);
         String textContent = node.getTextContent();
         if(textContent.equals("")||secondsPassed<Integer.parseInt(textContent))
@@ -96,7 +96,7 @@ public class HighScore {
         transformer.transform(domSource, streamResult);
     }
 
-    public static ArrayList<String> getRecords() throws Exception {
+    public static ArrayList<String> getRecords() throws FileNotFoundException {
         try {
             createDocumentBuilder();
             if(file.isFile()){
@@ -110,6 +110,6 @@ public class HighScore {
         } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
-        throw new Exception();
+        throw new FileNotFoundException();
     }
 }
