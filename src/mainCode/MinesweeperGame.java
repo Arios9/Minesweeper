@@ -90,22 +90,30 @@ public class MinesweeperGame {
     private void countBombsAroundButtons() {
         for(int i = 0; i< arrayHeight; i++)
             for(int j = 0; j< arrayWidth; j++)
-                for(int k=i-1; k<=i+1; k++)
-                    for(int s=j-1; s<=j+1; s++)
-                         if((k>=0&&s>=0&&k< arrayHeight &&s< arrayWidth)&&!(k==i&&s==j))
-                             if(squares[k][s].HasBomb())
-                                 squares[i][j].incrementBombsAroundIt();
+                countBombsAroundButton(squares[i][j]);
     }
-    
+
+    private void countBombsAroundButton(Square square) {
+        int i=square.getI(), j=square.getJ();
+        for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
+            if(a<0)continue;
+            for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
+                if(b<0)continue;
+                if(squares[a][b].equals(square))continue;
+                if(squares[a][b].HasBomb())
+                    squares[i][j].incrementBombsAroundIt();
+            }
+        }
+    }
+
     public void setBombsEverywhere(){
         for(int i = 0; i< arrayHeight; i++)
             for(int j = 0; j< arrayWidth; j++)
-                if(squares[i][j].HasBomb() && !squares[i][j].HasFlag())
+                if(squares[i][j].HasBomb())
                     squares[i][j].setBombIcon();
         gameOver(RestartButton.loseFace);
     }
-    
-    
+
     private void gameOver(ImageIcon icon) {
         for(int i = 0; i< arrayHeight; i++)
             for(int j = 0; j< arrayWidth; j++)
@@ -137,7 +145,8 @@ public class MinesweeperGame {
         for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
             if(a<0)continue;
             for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
-                if(b<0) continue;
+                if(b<0)continue;
+                if(squares[a][b].equals(square))continue;
                 recursion(squares[a][b]);
             }
         }

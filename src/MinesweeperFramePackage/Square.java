@@ -85,20 +85,8 @@ public class Square extends JButton implements MouseListener {
         return j;
     }
 
-    public int getBombsAroundIt() {
-        return bombsAroundIt;
-    }
-
     public boolean HasBomb() {
         return hasBomb;
-    }
-
-    public boolean HasFlag() {
-        return hasFlag;
-    }
-
-    public boolean HasDoneRecursion() {
-        return hasDoneRecursion;
     }
 
     public void setHasBomb(boolean hasBomb) {
@@ -106,6 +94,7 @@ public class Square extends JButton implements MouseListener {
     }
 
     public void setBombIcon() {
+        if(!hasFlag)
         setIcon(bombIcon);
     }
 
