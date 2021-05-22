@@ -134,12 +134,12 @@ public class MinesweeperGame {
     }
 
     private void recursionForButtonsAround(Square square) {
-        int i=square.getI(),j=square.getJ();
-        for(int k=i-1; k<=i+1; k++){
-            if(k<0||k == arrayHeight)continue;
-            for(int s=j-1; s<=j+1; s++){
-                if(s<0||s == arrayWidth)continue;
-                recursion(squares[k][s]);
+        int i=square.getI(), j=square.getJ();
+        for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
+            if(a<0)continue;
+            for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
+                if(b<0) continue;
+                recursion(squares[a][b]);
             }
         }
     }
