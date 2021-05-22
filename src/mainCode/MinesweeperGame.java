@@ -78,8 +78,8 @@ public class MinesweeperGame {
         Random rand = new Random();
         int bombs=0;
         while(bombs < currentGameLevel.getNumberOfBombs()){
-            int i=rand.nextInt(currentGameLevel.getNumberOfSquaresInHeight());
-            int j=rand.nextInt(currentGameLevel.getNumberOfSquaresInWidth());
+            int i=rand.nextInt(arrayHeight);
+            int j=rand.nextInt(arrayWidth);
             if(!squares[i][j].HasBomb()){
                 squares[i][j].setHasBomb(true);
                 bombs++;
@@ -90,20 +90,7 @@ public class MinesweeperGame {
     private void countBombsAroundButtons() {
         for(int i = 0; i< arrayHeight; i++)
             for(int j = 0; j< arrayWidth; j++)
-                countBombsAroundButton(squares[i][j]);
-    }
-
-    private void countBombsAroundButton(Square square) {
-        int i=square.getI(), j=square.getJ();
-        for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
-            if(a<0)continue;
-            for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
-                if(b<0)continue;
-                if(squares[a][b].equals(square))continue;
-                if(squares[a][b].HasBomb())
-                    squares[i][j].incrementBombsAroundIt();
-            }
-        }
+                squares[i][j].countBombsAroundButtonIt();
     }
 
     public void setBombsEverywhere(){
@@ -128,29 +115,5 @@ public class MinesweeperGame {
             HighScore.checkForHighScore();
         }
     }
-
-    
-    public void recursion(Square square) {
-        if(square.canDoRecursion()){
-            square.cancelIt();
-            if(square.HasBombsAroundIt())
-                square.setNumberText();
-            else
-                recursionForButtonsAround(square);
-        }
-    }
-
-    private void recursionForButtonsAround(Square square) {
-        int i=square.getI(), j=square.getJ();
-        for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
-            if(a<0)continue;
-            for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
-                if(b<0)continue;
-                if(squares[a][b].equals(square))continue;
-                recursion(squares[a][b]);
-            }
-        }
-    }
-
 
 }

@@ -39,8 +39,41 @@ public class Square extends JButton implements MouseListener {
             if(hasBomb)
                 GameInstance().setBombsEverywhere();
             else{
-                GameInstance().recursion(this);
+                recursion();
                 GameInstance().checkForWin();
+            }
+        }
+    }
+
+    private void recursion() {
+        if(canDoRecursion()){
+            cancelIt();
+            if(HasBombsAroundIt())
+                setNumberText();
+            else
+                recursionForButtonsAroundIt();
+        }
+    }
+
+    private void recursionForButtonsAroundIt() {
+        for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
+            if(a<0)continue;
+            for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
+                if(b<0)continue;
+                if(squares[a][b].equals(this))continue;
+                squares[a][b].recursion();
+            }
+        }
+    }
+
+    public void countBombsAroundButtonIt() {
+        for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
+            if(a<0)continue;
+            for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
+                if(b<0)continue;
+                if(squares[a][b].equals(this))continue;
+                if(squares[a][b].hasBomb)
+                    squares[i][j].incrementBombsAroundIt();
             }
         }
     }
@@ -75,14 +108,6 @@ public class Square extends JButton implements MouseListener {
 
     public void incrementBombsAroundIt(){
         bombsAroundIt++;
-    }
-
-    public int getI() {
-        return i;
-    }
-
-    public int getJ() {
-        return j;
     }
 
     public boolean HasBomb() {
