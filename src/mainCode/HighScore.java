@@ -58,7 +58,7 @@ public class HighScore {
         if(!file.isFile())
             createNewXMLDocument();
         else
-            parseFileAndItsElements(file);
+            parseFileAndRoot();
         setNewValueToElementIfTimeIsBetter();
     }
 
@@ -73,7 +73,7 @@ public class HighScore {
         });
     }
 
-    private static void parseFileAndItsElements(File file) throws IOException, SAXException {
+    private static void parseFileAndRoot() throws IOException, SAXException {
         document = documentBuilder.parse(file);
         root = document.getDocumentElement();
     }
@@ -100,7 +100,7 @@ public class HighScore {
         try {
             createDocumentBuilder();
             if(file.isFile()){
-                parseFileAndItsElements(file);
+                parseFileAndRoot();
                 NodeList childNodes = root.getChildNodes();
                 ArrayList<String> strings = new ArrayList<>();
                 for(int i=0; i<childNodes.getLength(); i++)
