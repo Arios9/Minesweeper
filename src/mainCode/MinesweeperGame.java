@@ -52,7 +52,7 @@ public class MinesweeperGame {
 
 
     public void startNewGame() {
-        boardPanel.setTheBoard();
+        setTheBoard();
         createBombs();
         countBombsAroundButtons();
         createTimer();
@@ -88,6 +88,10 @@ public class MinesweeperGame {
         }
     }
 
+    private void setTheBoard() {
+        loopTheArray((i, j) -> boardPanel.add(squares[i][j]=new Square(i,j)));
+    }
+
     private void countBombsAroundButtons() {
         loopTheArray((i, j) -> squares[i][j].countBombsAroundButtonIt());
     }
@@ -103,7 +107,7 @@ public class MinesweeperGame {
         restartButton.setIcon(icon);
     }
 
-    private void loopTheArray(ArrayLoop arrayLoop){
+    public void loopTheArray(ArrayLoop arrayLoop){
         for(int i = 0; i< arrayHeight; i++)
             for(int j = 0; j< arrayWidth; j++)
                 arrayLoop.method(i,j);
