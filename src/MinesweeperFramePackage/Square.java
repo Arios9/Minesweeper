@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.function.Consumer;
 
 import static MinesweeperFramePackage.MinesweeperFrame.*;
 import static mainCode.MinesweeperGame.*;
@@ -56,27 +57,26 @@ public class Square extends JButton implements MouseListener {
     }
 
     private void recursionForButtonsAroundIt() {
-        LoopAroundIt((a,b) -> squares[a][b].recursion());
+        LoopAroundIt(square -> square.recursion());
     }
 
     public void countBombsAroundButtonIt() {
-        LoopAroundIt((a,b) ->{
-            if(squares[a][b].hasBomb)
+        LoopAroundIt(square -> {
+            if(square.hasBomb)
             bombsAroundIt++;
         });
     }
 
-    private void LoopAroundIt(ArrayLoop arrayLoop) {
+    private void LoopAroundIt(Consumer<Square> consumer) {
         for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
             if(a<0)continue;
             for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
                 if(b<0)continue;
                 if(squares[a][b].equals(this))continue;
-                arrayLoop.method(a,b);
+                consumer.accept(squares[a][b]);
             }
         }
     }
-
 
     @Override public void mousePressed(MouseEvent me) {
         if(SwingUtilities.isLeftMouseButton(me))

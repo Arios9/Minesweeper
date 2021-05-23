@@ -1,6 +1,5 @@
 package mainCode;
 
-import MinesweeperFramePackage.ArrayLoop;
 import MinesweeperFramePackage.MinesweeperFrame;
 import MinesweeperFramePackage.RestartButton;
 import MinesweeperFramePackage.Square;
@@ -8,6 +7,7 @@ import mainMenuPackage.GameLevel;
 
 import java.util.Random;
 import java.util.Timer;
+import java.util.function.Consumer;
 import javax.swing.ImageIcon;
 
 import static MinesweeperFramePackage.MinesweeperFrame.*;
@@ -53,7 +53,7 @@ public class MinesweeperGame {
 
 
     public void startNewGame() {
-        setTheBoard();
+        boardPanel.setTheBoard();
         createBombs();
         countBombsAroundButtons();
         createTimer();
@@ -89,29 +89,25 @@ public class MinesweeperGame {
         }
     }
 
-    private void setTheBoard() {
-        loopTheArray((i,j) -> boardPanel.add(squares[i][j]=new Square(i,j)));
-    }
-
     private void countBombsAroundButtons() {
-        loopTheArray((i,j) -> squares[i][j].countBombsAroundButtonIt());
+        loopTheArray(square -> square.countBombsAroundButtonIt());
     }
 
     public void setBombsEverywhere(){
-        loopTheArray((i,j) -> squares[i][j].setBombIcon());
+        loopTheArray(square -> square.setBombIcon());
         gameOver(RestartButton.loseFace);
     }
 
     private void gameOver(ImageIcon icon) {
-        loopTheArray((i,j) -> squares[i][j].removeMouseListener(squares[i][j]));
+        loopTheArray(square -> square.removeMouseListener(square));
         timer.cancel();
         restartButton.setIcon(icon);
     }
 
-    public void loopTheArray(ArrayLoop arrayLoop){
+    public void loopTheArray(Consumer<Square> consumer){
         for(int i = 0; i< arrayHeight; i++)
             for(int j = 0; j< arrayWidth; j++)
-                arrayLoop.method(i,j);
+                consumer.accept(squares[i][j]);
     }
 
     public void checkForWin() {
@@ -120,6 +116,7 @@ public class MinesweeperGame {
             HighScore.checkForHighScore();
         }
     }
-
-
+    
 }
+
+
