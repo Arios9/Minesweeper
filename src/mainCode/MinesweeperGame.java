@@ -111,12 +111,16 @@ public class MinesweeperGame {
     }
 
     public void checkForWin() {
-        if(remainingButtons == numberOfBombs){
+        if(winExists()){
             gameOver(RestartButton.winFace);
             HighScore.checkForHighScore();
         }
     }
-    
+
+    private boolean winExists() {
+        return remainingButtons == numberOfBombs;
+    }
+
 }
 
 
