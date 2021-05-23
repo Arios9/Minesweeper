@@ -20,7 +20,7 @@ public class MinesweeperGame {
     public static Square[][] squares;
     public static Timer timer;
     public static int numberOfUnusedFlags, remainingButtons;
-    public static int arrayHeight, arrayWidth;
+    public static int arrayHeight, arrayWidth ,numberOfBombs;
 
     public static void createNewGame(GameLevel gameLevel) throws GameInProgressException {
         if(minesweeperGame != null)
@@ -43,8 +43,9 @@ public class MinesweeperGame {
         timer.cancel();
     }
 
-    private MinesweeperGame(GameLevel gl) {
-        currentGameLevel = gl;
+    private MinesweeperGame(GameLevel gameLevel) {
+        currentGameLevel = gameLevel;
+        numberOfBombs = currentGameLevel.getNumberOfBombs();
         arrayHeight = currentGameLevel.getNumberOfSquaresInHeight();
         arrayWidth = currentGameLevel.getNumberOfSquaresInWidth();
         squares = new Square[arrayHeight][arrayWidth];
@@ -61,8 +62,8 @@ public class MinesweeperGame {
     }
 
     private void initializeCountingVariables() {
-        numberOfUnusedFlags = currentGameLevel.getNumberOfBombs();
-        remainingButtons = currentGameLevel.getNumberOfSquaresInHeight() * currentGameLevel.getNumberOfSquaresInWidth();
+        numberOfUnusedFlags = numberOfBombs;
+        remainingButtons = arrayHeight * arrayWidth;
     }
 
     private void setComponentsContent() {
@@ -78,7 +79,7 @@ public class MinesweeperGame {
     private void createBombs() {
         Random rand = new Random();
         int bombs=0;
-        while(bombs < currentGameLevel.getNumberOfBombs()){
+        while(bombs < numberOfBombs){
             int i=rand.nextInt(arrayHeight);
             int j=rand.nextInt(arrayWidth);
             if(!squares[i][j].HasBomb()){
@@ -114,7 +115,7 @@ public class MinesweeperGame {
     }
 
     public void checkForWin() {
-        if(remainingButtons == currentGameLevel.getNumberOfBombs()){
+        if(remainingButtons == numberOfBombs){
             gameOver(RestartButton.winFace);
             HighScore.checkForHighScore();
         }
