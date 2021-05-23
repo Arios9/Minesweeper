@@ -56,23 +56,23 @@ public class Square extends JButton implements MouseListener {
     }
 
     private void recursionForButtonsAroundIt() {
-        LoopAroundIt((a, b) -> squares[a][b].recursion());
+        LoopAroundIt((a,b) -> squares[a][b].recursion());
     }
 
     public void countBombsAroundButtonIt() {
-        LoopAroundIt((a, b) ->{
+        LoopAroundIt((a,b) ->{
             if(squares[a][b].hasBomb)
             bombsAroundIt++;
         });
     }
 
-    private void LoopAroundIt(AroundSquare aroundSquare) {
+    private void LoopAroundIt(ArrayLoop arrayLoop) {
         for(int a=i-1; a<=i+1 && a<arrayHeight; a++){
             if(a<0)continue;
             for(int b=j-1; b<=j+1 && b<arrayWidth; b++){
                 if(b<0)continue;
                 if(squares[a][b].equals(this))continue;
-                aroundSquare.method(a,b);
+                arrayLoop.method(a,b);
             }
         }
     }

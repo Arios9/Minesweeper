@@ -90,20 +90,20 @@ public class MinesweeperGame {
     }
 
     private void setTheBoard() {
-        loopTheArray((i, j) -> boardPanel.add(squares[i][j]=new Square(i,j)));
+        loopTheArray((i,j) -> boardPanel.add(squares[i][j]=new Square(i,j)));
     }
 
     private void countBombsAroundButtons() {
-        loopTheArray((i, j) -> squares[i][j].countBombsAroundButtonIt());
+        loopTheArray((i,j) -> squares[i][j].countBombsAroundButtonIt());
     }
 
     public void setBombsEverywhere(){
-        loopTheArray((i, j) -> squares[i][j].setBombIcon());
+        loopTheArray((i,j) -> squares[i][j].setBombIcon());
         gameOver(RestartButton.loseFace);
     }
 
     private void gameOver(ImageIcon icon) {
-        loopTheArray((i, j) -> squares[i][j].removeMouseListener(squares[i][j]));
+        loopTheArray((i,j) -> squares[i][j].removeMouseListener(squares[i][j]));
         timer.cancel();
         restartButton.setIcon(icon);
     }
