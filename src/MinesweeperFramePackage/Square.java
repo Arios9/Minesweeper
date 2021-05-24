@@ -111,12 +111,15 @@ public class Square extends JButton implements MouseListener {
         return hasBomb;
     }
 
+    public boolean HasFlag() {
+        return hasFlag;
+    }
+
     public void setHasBomb(boolean hasBomb) {
         this.hasBomb = hasBomb;
     }
 
     public void setBombIcon() {
-        if(!hasFlag)
         setIcon(bombIcon);
     }
 

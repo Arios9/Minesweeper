@@ -1,8 +1,10 @@
 package mainCode;
 
-import MinesweeperFramePackage.RestartButton;
 import MinesweeperFramePackage.Square;
 
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import static mainCode.MinesweeperGame.*;
@@ -29,10 +31,10 @@ public class BombHandler {
         }
     }
 
-    private static final int milliseconds = 50;
+    private static final int milliseconds = 100;
 
     public void setBombsEverywhere(Square clickedSquare){
-        clickedSquare.setBombIcon();
+        bombExplosion(clickedSquare);
         bombSquares.remove(clickedSquare);
         timer.schedule(new TimerTask() {
             @Override
@@ -41,9 +43,29 @@ public class BombHandler {
                     cancel();
                 }else{
                     Square square = bombSquares.remove(0);
-                    square.setBombIcon();
+                    if(!square.HasFlag())
+                    bombExplosion(square);
                 }
             }
         }, milliseconds, milliseconds);
+    }
+
+    private void bombExplosion(Square square) {
+        square.setBombIcon();
+        playExplosionAudio();
+    }
+
+    private static final String BOOM_FILE_PATH = "src/files/boom.wav";
+
+    private void playExplosionAudio() {
+        File file = new File(BOOM_FILE_PATH);
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 }
