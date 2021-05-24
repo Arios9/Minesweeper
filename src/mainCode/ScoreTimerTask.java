@@ -4,11 +4,11 @@ import java.util.TimerTask;
 
 import static MinesweeperFramePackage.MinesweeperFrame.timeLabel;
 
-public class MyTimerTask extends TimerTask {
+public class ScoreTimerTask extends TimerTask {
 
     public static int secondsPassed;
 
-    public MyTimerTask() {
+    public ScoreTimerTask() {
         secondsPassed = 0;
     }
 

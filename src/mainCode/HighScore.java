@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static mainCode.MinesweeperGame.currentGameLevel;
-import static mainCode.MyTimerTask.secondsPassed;
+import static mainCode.ScoreTimerTask.secondsPassed;
 import static mainMenuPackage.MainMenu.gameLevels;
 import static mainMenuPackage.MainMenu.setRecordsToLabels;
 

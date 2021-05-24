@@ -5,7 +5,6 @@ import MinesweeperFramePackage.RestartButton;
 import MinesweeperFramePackage.Square;
 import mainMenuPackage.GameLevel;
 
-import java.util.Random;
 import java.util.Timer;
 import java.util.function.Consumer;
 import javax.swing.ImageIcon;
@@ -21,6 +20,8 @@ public class MinesweeperGame {
     public static Timer timer;
     public static int numberOfUnusedFlags, remainingButtons;
     public static int arrayHeight, arrayWidth ,numberOfBombs;
+    public static BombHandler bombHandler;
+    public static ScoreTimerTask scoreTimerTask;
 
     public static void createNewGame(GameLevel gameLevel) throws GameInProgressException {
         if(minesweeperGame != null)
@@ -51,14 +52,18 @@ public class MinesweeperGame {
         squares = new Square[arrayHeight][arrayWidth];
     }
 
-
     public void startNewGame() {
         boardPanel.setTheBoard();
-        createBombs();
+        createBombsAndHandler();
         countBombsAroundButtons();
         createTimer();
         initializeCountingVariables();
         setComponentsContent();
+    }
+
+    private void createBombsAndHandler() {
+        bombHandler = new BombHandler();
+        bombHandler.createBombs();
     }
 
     private void initializeCountingVariables() {
@@ -73,35 +78,18 @@ public class MinesweeperGame {
 
     private void createTimer() {
         timer=new Timer();
-        timer.schedule(new MyTimerTask(),0,1000);
-    }
-    
-    private void createBombs() {
-        Random rand = new Random();
-        int bombs=0;
-        while(bombs < numberOfBombs){
-            int i=rand.nextInt(arrayHeight);
-            int j=rand.nextInt(arrayWidth);
-            if(!squares[i][j].HasBomb()){
-                squares[i][j].setHasBomb(true);
-                bombs++;
-            }    
-        }
+        scoreTimerTask = new ScoreTimerTask();
+        timer.schedule(scoreTimerTask,0,1000);
     }
 
     private void countBombsAroundButtons() {
         loopTheArray(square -> square.countBombsAroundButtonIt());
     }
 
-    public void setBombsEverywhere(){
-        loopTheArray(square -> square.setBombIcon());
-        gameOver(RestartButton.loseFace);
-    }
-
-    private void gameOver(ImageIcon icon) {
-        loopTheArray(square -> square.removeMouseListener(square));
-        timer.cancel();
+    public void gameOver(ImageIcon icon) {
+        scoreTimerTask.cancel();
         restartButton.setIcon(icon);
+        loopTheArray(square -> square.removeMouseListener(square));
     }
 
     public void loopTheArray(Consumer<Square> consumer){
