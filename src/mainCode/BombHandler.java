@@ -34,8 +34,8 @@ public class BombHandler {
     private static final int milliseconds = 100;
 
     public void setBombsEverywhere(Square clickedSquare){
-        bombExplosion(clickedSquare);
         bombSquares.remove(clickedSquare);
+        bombExplosion(clickedSquare);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -56,16 +56,10 @@ public class BombHandler {
     }
 
     private static final String BOOM_FILE_PATH = "src/files/boom.wav";
+    private static final File audioFile = new File(BOOM_FILE_PATH);
 
     private void playExplosionAudio() {
-        File file = new File(BOOM_FILE_PATH);
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
+        AudioManager.playAudio(audioFile);
     }
+
 }
