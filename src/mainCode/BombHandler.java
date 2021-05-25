@@ -2,16 +2,14 @@ package mainCode;
 
 import MinesweeperFramePackage.Square;
 
-import javax.sound.sampled.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import static mainCode.MinesweeperGame.*;
 
 public class BombHandler {
 
-    private List<Square> bombSquares;
+    private final List<Square> bombSquares;
 
     public BombHandler() {
         bombSquares = new ArrayList<>();
