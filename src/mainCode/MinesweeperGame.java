@@ -83,7 +83,7 @@ public class MinesweeperGame {
     }
 
     private void countBombsAroundButtons() {
-        loopTheArray(square -> square.countBombsAroundButtonIt());
+        loopTheArray(Square::countBombsAroundButtonIt);
     }
 
     public void gameOver(ImageIcon icon) {
