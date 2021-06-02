@@ -36,8 +36,7 @@ public class Square extends JButton implements MouseListener {
             flagsLabel.reFresh(numberOfUnusedFlags);
         }
         if(SwingUtilities.isLeftMouseButton(me)){
-            if(hasFlag) return;
-            if(hasBomb) {
+            if(bombTriggered()) {
                 GameInstance().gameOver(RestartButton.loseFace);
                 bombHandler.setBombsEverywhere(this);
             }else{
@@ -45,6 +44,10 @@ public class Square extends JButton implements MouseListener {
                 GameInstance().checkForWin();
             }
         }
+    }
+
+    private boolean bombTriggered() {
+        return hasBomb && !hasFlag;
     }
 
     private void recursion() {
